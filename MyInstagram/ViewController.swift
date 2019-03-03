@@ -15,8 +15,16 @@ class ViewController: UIViewController {
     let plusPhotoButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        btn.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return btn
     }()
+    
+    @objc func handlePlusPhoto() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     let emailTextField: UITextField = {
         let tf = UITextField()
@@ -50,15 +58,15 @@ class ViewController: UIViewController {
         return tf
     }()
     
-    lazy var signUpButton: UIButton = {
+    let signUpButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Sign Up", for: .normal)
+        btn.setTitle("Register", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = UIColor(r: 149, g: 204, b: 244)
         btn.layer.cornerRadius = 5
         btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         btn.isEnabled = false
-        btn.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return btn
     }()
     
@@ -97,14 +105,14 @@ class ViewController: UIViewController {
             username.isEmpty == false,
             password.isEmpty == false else {
                 signUpButton.isEnabled = false
-                signUpButton.backgroundColor = .signUpButtonBlue
+                signUpButton.backgroundColor = .registerButtonBlue
                 return
         }
         signUpButton.isEnabled = true
         signUpButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
     }
     
-    @objc func handleSignUp() {
+    @objc func handleRegister() {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
@@ -141,5 +149,34 @@ class ViewController: UIViewController {
                          height: 200)
     }
 
+}
+
+// MARK:- Regarding Image Picker Controller
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            selectedImageFromPicker = editedImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            selectedImageFromPicker = originalImage
+        }
+        
+        guard let selectedImage = selectedImageFromPicker else {
+            return
+        }
+        
+        plusPhotoButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        plusPhotoButton.imageView?.contentMode = .scaleAspectFill
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.black.cgColor
+        plusPhotoButton.layer.borderWidth = 3
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
