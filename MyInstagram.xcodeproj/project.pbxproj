@@ -11,7 +11,6 @@
 		36544594222B9609006FF627 /* UIKit+MyInstagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36544593222B9609006FF627 /* UIKit+MyInstagram.swift */; };
 		3670D29C222B7C98002FDAF9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3670D29B222B7C98002FDAF9 /* AppDelegate.swift */; };
 		3670D29E222B7C98002FDAF9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3670D29D222B7C98002FDAF9 /* ViewController.swift */; };
-		3670D2A1222B7C98002FDAF9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3670D29F222B7C98002FDAF9 /* Main.storyboard */; };
 		3670D2A3222B7C98002FDAF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3670D2A2222B7C98002FDAF9 /* Assets.xcassets */; };
 		3670D2A6222B7C98002FDAF9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3670D2A4222B7C98002FDAF9 /* LaunchScreen.storyboard */; };
 		3670D2B1222B7C98002FDAF9 /* MyInstagramTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3670D2B0222B7C98002FDAF9 /* MyInstagramTests.swift */; };
@@ -36,7 +35,6 @@
 		3670D298222B7C98002FDAF9 /* MyInstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyInstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3670D29B222B7C98002FDAF9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3670D29D222B7C98002FDAF9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3670D2A0222B7C98002FDAF9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3670D2A2222B7C98002FDAF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3670D2A5222B7C98002FDAF9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3670D2A7222B7C98002FDAF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -107,7 +105,6 @@
 				3670D29B222B7C98002FDAF9 /* AppDelegate.swift */,
 				36544593222B9609006FF627 /* UIKit+MyInstagram.swift */,
 				3670D29D222B7C98002FDAF9 /* ViewController.swift */,
-				3670D29F222B7C98002FDAF9 /* Main.storyboard */,
 				36C511F7222BBCAB0071AE8C /* Resources */,
 				3670D2A4222B7C98002FDAF9 /* LaunchScreen.storyboard */,
 			);
@@ -229,7 +226,6 @@
 				3670D2A6222B7C98002FDAF9 /* LaunchScreen.storyboard in Resources */,
 				36C511F9222BBCDE0071AE8C /* GoogleService-Info.plist in Resources */,
 				3670D2A3222B7C98002FDAF9 /* Assets.xcassets in Resources */,
-				3670D2A1222B7C98002FDAF9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,14 +343,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3670D29F222B7C98002FDAF9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3670D2A0222B7C98002FDAF9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3670D2A4222B7C98002FDAF9 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
