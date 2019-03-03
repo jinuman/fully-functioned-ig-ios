@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     // MARK:- Screen properties
     let plusPhotoButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
         return btn
     }()
@@ -66,11 +65,15 @@ class ViewController: UIViewController {
         
         // x, y, w, h
         NSLayoutConstraint.activate([
-            plusPhotoButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            plusPhotoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            plusPhotoButton.widthAnchor.constraint(equalToConstant: 140),
-            plusPhotoButton.heightAnchor.constraint(equalToConstant: 140)
+            plusPhotoButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
             ])
+        plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                               leading: nil,
+                               bottom: nil,
+                               trailing: nil,
+                               marginTop: 40,
+                               width: 140,
+                               height: 140)
         
         setupInputFields()
     }
@@ -78,18 +81,20 @@ class ViewController: UIViewController {
     // MARK:- Setting up layouts methods
     fileprivate func setupInputFields() {
         let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
         view.addSubview(stackView)
         
-        // x, y, w, h
-        stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40).isActive = true
-        stackView.topAnchor.constraint(equalTo: plusPhotoButton.bottomAnchor, constant: 20).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 200)
+        stackView.anchor(top: plusPhotoButton.bottomAnchor,
+                         leading: view.safeAreaLayoutGuide.leadingAnchor,
+                         bottom: nil,
+                         trailing: view.safeAreaLayoutGuide.trailingAnchor,
+                         marginTop: 20,
+                         marginLeading: 40,
+                         marginTrailing: 40,
+                         height: 200)
     }
 
 }
