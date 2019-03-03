@@ -19,13 +19,6 @@ class ViewController: UIViewController {
         return btn
     }()
     
-    @objc func handlePlusPhoto() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.allowsEditing = true
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
     let emailTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
@@ -112,6 +105,13 @@ class ViewController: UIViewController {
         signUpButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
     }
     
+    @objc func handlePlusPhoto() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
     @objc func handleRegister() {
         guard
             let email = emailTextField.text,
@@ -120,14 +120,55 @@ class ViewController: UIViewController {
                 return
         }
         
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-            if let error = error {
-                print("@@ Failed to create user: ", error.localizedDescription)
+        Auth.auth().createUser(withEmail: email, password: password) { [weak self] (result, err) in
+            if let err = err {
+                print("Failed to create user: ", err.localizedDescription)
                 return
             }
+            print("\nSuccessfully created user: \(result?.user.uid ?? "")\n")
             
-            print("\n!! Successfully created user: \(result?.user.uid ?? "")\n")
+            guard
+                let self = self,
+                let image = self.plusPhotoButton.imageView?.image,
+                let uploadData = image.jpegData(compressionQuality: 0.05) else {
+                    return
+            }
+            let imageName = UUID().uuidString
+            let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg")
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, err) in
+                if let err = err {
+                    print("Failed to upload profile image: ", err.localizedDescription)
+                    return
+                }
+                storageRef.downloadURL(completion: { [weak self] (url, err) in
+                    if let err = err {
+                        print("Failed to fetch download url: ", err.localizedDescription)
+                    }
+                    guard
+                        let self = self,
+                        let profileImageUrl = url?.absoluteString,
+                        let uid = result?.user.uid else {
+                            return
+                    }
+                    print("\nSuccessfully uploaded profile image: ", profileImageUrl)
+                    
+                    let dictionaryValues = ["username": username, "profileImageUrl": profileImageUrl]
+                    let values = [uid: dictionaryValues]
+                    self.registerUserIntoDatabase(with: uid, values: values)
+                })
+            })
+            
         }
+    }
+    
+    fileprivate func registerUserIntoDatabase(with uid: String, values: [String: Any]) {
+        let reference: DatabaseReference = Database.database().reference()
+        reference.child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if let err = err {
+                print("Failed to save user into database: ", err.localizedDescription)
+            }
+            print("\nSuccessfully saved user into database.")
+        })
     }
 
     // MARK:- Setting up layouts methods
