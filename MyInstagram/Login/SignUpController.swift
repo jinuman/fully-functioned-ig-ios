@@ -55,11 +55,25 @@ class SignUpController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(r: 149, g: 204, b: 244)
+        button.backgroundColor = UIColor.loginColor
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.isEnabled = false
         button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        return button
+    }()
+    
+    let alreadyHaveAccountButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        let attributedTitle = NSMutableAttributedString(string: "Already hava an account?  ",
+                                                        attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+                                                                     NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        attributedTitle.append(NSAttributedString(string: "Sign In",
+                                                  attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14),
+                                                               NSAttributedString.Key.foregroundColor: UIColor(r: 17, g: 154, b: 237)]))
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(handleAlreadyHaveAccount), for: .touchUpInside)
         return button
     }()
     
@@ -84,8 +98,18 @@ class SignUpController: UIViewController {
                                marginTrailing: 0,
                                width: 140,
                                height: 140)
-        
         setupInputFields()
+        view.addSubview(alreadyHaveAccountButton)
+        alreadyHaveAccountButton.anchor(top: nil,
+                                     leading: view.safeAreaLayoutGuide.leadingAnchor,
+                                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                     trailing: view.safeAreaLayoutGuide.trailingAnchor,
+                                     marginTop: 0,
+                                     marginLeading: 0,
+                                     marginBottom: 0,
+                                     marginTrailing: 0,
+                                     width: 0,
+                                     height: 50)
     }
     
     // MARK:- Event handling methods
@@ -101,7 +125,7 @@ class SignUpController: UIViewController {
             username.isEmpty == false,
             password.isEmpty == false else {
                 signUpButton.isEnabled = false
-                signUpButton.backgroundColor = .signUpButtonBlue
+                signUpButton.backgroundColor = .loginColor
                 return
         }
         signUpButton.isEnabled = true
@@ -172,6 +196,10 @@ class SignUpController: UIViewController {
             }
             print("\nSuccessfully saved user into database.")
         })
+    }
+    
+    @objc func handleAlreadyHaveAccount() {
+        _ = navigationController?.popViewController(animated: true)
     }
 
     // MARK:- Setting up layouts methods
