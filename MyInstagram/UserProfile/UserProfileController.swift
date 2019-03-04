@@ -27,6 +27,7 @@ class UserProfileController: UICollectionViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         
         fetchUserAndSetupTitle()
+        setupLogOutButton()
     }
     
     // Event methods
@@ -47,6 +48,30 @@ class UserProfileController: UICollectionViewController {
         }) { (err) in
             print("Failed to fetch user: \(err.localizedDescription)")
         }
+    }
+    
+    fileprivate func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+    }
+    
+    @objc func handleLogOut() {
+        let alertController = UIAlertController(title: nil,
+                                                message: nil,
+                                                preferredStyle: .actionSheet)
+        let logOutAction = UIAlertAction(title: "Log Out", style: .destructive) { (_) in
+            do {
+                try Auth.auth().signOut()
+                #warning("Present LoginController after sign out..Need to implement later on. ")
+                
+            } catch let signOutErr {
+                print("Failed to sign out: \(signOutErr.localizedDescription)")
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(logOutAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
 
