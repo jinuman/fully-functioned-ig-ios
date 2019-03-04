@@ -61,7 +61,7 @@ class UserProfileController: UICollectionViewController {
         let logOutAction = UIAlertAction(title: "Log Out", style: .destructive) { (_) in
             do {
                 try Auth.auth().signOut()
-                #warning("Present LoginController after sign out..Need to implement later on. ")
+                #warning("Present SignIn Controller after sign out..Need to implement later on. ")
                 
             } catch let signOutErr {
                 print("Failed to sign out: \(signOutErr.localizedDescription)")

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SignUpController.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 03/03/2019.
@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController {
+class SignUpController: UIViewController {
 
     // MARK:- Screen properties
     let plusPhotoButton: UIButton = {
@@ -53,13 +53,13 @@ class ViewController: UIViewController {
     
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Register", for: .normal)
+        button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(r: 149, g: 204, b: 244)
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.isEnabled = false
-        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
     
@@ -101,7 +101,7 @@ class ViewController: UIViewController {
             username.isEmpty == false,
             password.isEmpty == false else {
                 signUpButton.isEnabled = false
-                signUpButton.backgroundColor = .registerButtonBlue
+                signUpButton.backgroundColor = .signUpButtonBlue
                 return
         }
         signUpButton.isEnabled = true
@@ -115,7 +115,7 @@ class ViewController: UIViewController {
         present(imagePicker, animated: true, completion: nil)
     }
     
-    @objc func handleRegister() {
+    @objc func handleSignUp() {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
@@ -197,7 +197,7 @@ class ViewController: UIViewController {
 }
 
 // MARK:- Regarding Image Picker Controller
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var selectedImageFromPicker: UIImage?
         

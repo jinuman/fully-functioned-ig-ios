@@ -13,7 +13,7 @@ extension UIColor {
         self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
     }
     
-    static var registerButtonBlue: UIColor {
+    static var signUpButtonBlue: UIColor {
         return .init(r: 149, g: 204, b: 244)
     }
 }
