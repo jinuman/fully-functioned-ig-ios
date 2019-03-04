@@ -13,18 +13,101 @@ class UserProfileHeader: UICollectionViewCell {
     var user: User? {
         didSet {
             setupProfileImage()
+            usernameLabel.text = user?.username
         }
     }
     
+    // MARK:- Screen properties
     let profileImageView: UIImageView = {
         let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
         return iv
+    }()
+    
+    let gridButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        return btn
+    }()
+    
+    let listButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "list"), for: .normal)
+        btn.tintColor = UIColor(white: 0, alpha: 0.2)
+        return btn
+    }()
+    
+    let bookmarkButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
+        btn.tintColor = UIColor(white: 0, alpha: 0.2)
+        return btn
+    }()
+    
+    let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        return label
+    }()
+    
+    let postsLabel: UILabel = {
+        let label = UILabel()
+        
+        let attributedText = NSMutableAttributedString(string: "11\n",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: "posts",
+                                                 attributes: [
+                                                    NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                                                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        label.attributedText = attributedText
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let followersLabel: UILabel = {
+        let label = UILabel()
+        let attributedText = NSMutableAttributedString(string: "0\n",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: "followers",
+                                                 attributes: [
+                                                    NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                                                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        label.attributedText = attributedText
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let followingLabel: UILabel = {
+        let label = UILabel()
+        let attributedText = NSMutableAttributedString(string: "0\n",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: "following",
+                                                 attributes: [
+                                                    NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                                                    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        label.attributedText = attributedText
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let editProfileButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Edit Profile", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        btn.layer.borderColor = UIColor.lightGray.cgColor
+        btn.layer.borderWidth = 1
+        btn.layer.cornerRadius = 5
+        btn.layer.masksToBounds = true
+        return btn
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .blue
         addSubview(profileImageView)
         profileImageView.anchor(top: self.topAnchor,
                                 leading: self.leadingAnchor,
@@ -39,6 +122,34 @@ class UserProfileHeader: UICollectionViewCell {
         
         profileImageView.layer.cornerRadius = 80 / 2
         profileImageView.clipsToBounds = true
+        
+        setupBottomToolbar()
+        
+        addSubview(usernameLabel)
+        
+        usernameLabel.anchor(top: profileImageView.bottomAnchor,
+                             leading: self.leadingAnchor,
+                             bottom: gridButton.topAnchor,
+                             trailing: self.trailingAnchor,
+                             marginTop: 4,
+                             marginLeading: 24,
+                             marginBottom: 4,
+                             marginTrailing: 24,
+                             width: 0,
+                             height: 0)
+        
+        setupUserStatsView()
+        addSubview(editProfileButton)
+        editProfileButton.anchor(top: postsLabel.bottomAnchor,
+                                 leading: postsLabel.leadingAnchor,
+                                 bottom: nil,
+                                 trailing: followingLabel.trailingAnchor,
+                                 marginTop: 2,
+                                 marginLeading: 0,
+                                 marginBottom: 0,
+                                 marginTrailing: 0,
+                                 width: 0,
+                                 height: 34)
     }
     
     fileprivate func setupProfileImage() {
@@ -64,7 +175,74 @@ class UserProfileHeader: UICollectionViewCell {
                 self?.profileImageView.image = image
             }
             print("\nSuccessfully fetch profile image: \(profileImageUrl)")
-        }.resume()
+            }.resume()
+    }
+    
+    fileprivate func setupBottomToolbar() {
+        let topSeparatorView = UIView()
+        topSeparatorView.backgroundColor = .lightGray
+        
+        let bottomSeparatorView = UIView()
+        bottomSeparatorView.backgroundColor = .lightGray
+        
+        let stackView = UIStackView(arrangedSubviews: [gridButton, listButton, bookmarkButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        
+        addSubview(stackView)
+        addSubview(topSeparatorView)
+        addSubview(bottomSeparatorView)
+        
+        stackView.anchor(top: nil,
+                         leading: self.leadingAnchor,
+                         bottom: self.bottomAnchor,
+                         trailing: self.trailingAnchor,
+                         marginTop: 0,
+                         marginLeading: 0,
+                         marginBottom: 0,
+                         marginTrailing: 0,
+                         width: 0,
+                         height: 50)
+        
+        topSeparatorView.anchor(top: stackView.topAnchor,
+                              leading: self.leadingAnchor,
+                              bottom: nil,
+                              trailing: self.trailingAnchor,
+                              marginTop: 0,
+                              marginLeading: 0,
+                              marginBottom: 0,
+                              marginTrailing: 0,
+                              width: 0,
+                              height: 0.5)
+        
+        bottomSeparatorView.anchor(top: stackView.bottomAnchor,
+                                   leading: self.leadingAnchor,
+                                   bottom: nil,
+                                   trailing: self.trailingAnchor,
+                                   marginTop: 0,
+                                   marginLeading: 0,
+                                   marginBottom: 0,
+                                   marginTrailing: 0,
+                                   width: 0,
+                                   height: 0.5)
+    }
+    
+    fileprivate func setupUserStatsView() {
+        let stackView = UIStackView(arrangedSubviews: [postsLabel, followersLabel, followingLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        addSubview(stackView)
+        
+        stackView.anchor(top: self.topAnchor,
+                         leading: profileImageView.trailingAnchor,
+                         bottom: nil,
+                         trailing: self.trailingAnchor,
+                         marginTop: 12,
+                         marginLeading: 12,
+                         marginBottom: 0,
+                         marginTrailing: 12,
+                         width: 0,
+                         height: 50)
     }
     
     required init?(coder aDecoder: NSCoder) {
