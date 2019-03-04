@@ -19,9 +19,9 @@ class UserProfileHeader: UICollectionViewCell {
     
     // MARK:- Screen properties
     let profileImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        return iv
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }()
     
     let gridButton: UIButton = {
