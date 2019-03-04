@@ -17,7 +17,8 @@ class MainTabBarController: UITabBarController {
             // if user is not logged in
             DispatchQueue.main.async { [weak self] in
                 let signInController = SignInController()
-                self?.present(signInController, animated: true, completion: nil)
+                let navController = UINavigationController(rootViewController: signInController)
+                self?.present(navController, animated: true, completion: nil)
             }
             return
         }

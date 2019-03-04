@@ -10,6 +10,7 @@ import UIKit
 
 class SignInController: UIViewController {
     
+    // MARK:- Screen properties
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Don't have an account?\tSign Up.", for: .normal)
@@ -17,12 +18,12 @@ class SignInController: UIViewController {
         return button
     }()
     
-    @objc func handleShowSignUp() {
-        
-    }
-    
+    // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.isNavigationBarHidden = true
+        
         view.backgroundColor = .white
         
         view.addSubview(signUpButton)
@@ -36,5 +37,10 @@ class SignInController: UIViewController {
                             marginTrailing: 0,
                             width: 0,
                             height: 50)
+    }
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
     }
 }
