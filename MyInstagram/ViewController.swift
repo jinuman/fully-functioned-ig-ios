@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         return btn
     }()
     
-    // MARK:- ViewController life methods
+    // MARK:- Life cycle methods need super call of itself.
     override func viewDidLoad() {
         super.viewDidLoad()
         
