@@ -25,23 +25,23 @@ class UserProfileHeader: UICollectionViewCell {
     }()
     
     let gridButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
-        return btn
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        return button
     }()
     
     let listButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(#imageLiteral(resourceName: "list"), for: .normal)
-        btn.tintColor = UIColor(white: 0, alpha: 0.2)
-        return btn
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
+        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        return button
     }()
     
     let bookmarkButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
-        btn.tintColor = UIColor(white: 0, alpha: 0.2)
-        return btn
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
+        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        return button
     }()
     
     let usernameLabel: UILabel = {
@@ -94,15 +94,15 @@ class UserProfileHeader: UICollectionViewCell {
     }()
     
     let editProfileButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("Edit Profile", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        btn.layer.borderColor = UIColor.lightGray.cgColor
-        btn.layer.borderWidth = 1
-        btn.layer.cornerRadius = 5
-        btn.layer.masksToBounds = true
-        return btn
+        let button = UIButton(type: .system)
+        button.setTitle("Edit Profile", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 5
+        button.layer.masksToBounds = true
+        return button
     }()
     
     override init(frame: CGRect) {

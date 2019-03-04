@@ -10,6 +10,12 @@ import UIKit
 
 class LoginController: UIViewController {
     
+    let signUpButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

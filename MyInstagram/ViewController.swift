@@ -13,10 +13,10 @@ class ViewController: UIViewController {
 
     // MARK:- Screen properties
     let plusPhotoButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
-        btn.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
-        return btn
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
+        return button
     }()
     
     let emailTextField: UITextField = {
@@ -52,15 +52,15 @@ class ViewController: UIViewController {
     }()
     
     let signUpButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("Register", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = UIColor(r: 149, g: 204, b: 244)
-        btn.layer.cornerRadius = 5
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        btn.isEnabled = false
-        btn.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
-        return btn
+        let button = UIButton(type: .system)
+        button.setTitle("Register", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(r: 149, g: 204, b: 244)
+        button.layer.cornerRadius = 5
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.isEnabled = false
+        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
+        return button
     }()
     
     // MARK:- Life cycle methods need super call of itself.
