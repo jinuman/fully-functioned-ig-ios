@@ -23,10 +23,10 @@ extension UIView {
                 leading: NSLayoutXAxisAnchor?,
                 bottom: NSLayoutYAxisAnchor?,
                 trailing: NSLayoutXAxisAnchor?,
-                marginTop: CGFloat = 0,
-                marginLeading: CGFloat = 0,
-                marginBottom: CGFloat = 0,
-                marginTrailing: CGFloat = 0,
+                marginTop: CGFloat,
+                marginLeading: CGFloat,
+                marginBottom: CGFloat,
+                marginTrailing: CGFloat,
                 width: CGFloat = 0,
                 height: CGFloat = 0) {
         

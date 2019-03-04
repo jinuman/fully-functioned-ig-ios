@@ -79,6 +79,9 @@ class ViewController: UIViewController {
                                bottom: nil,
                                trailing: nil,
                                marginTop: 40,
+                               marginLeading: 0,
+                               marginBottom: 0,
+                               marginTrailing: 0,
                                width: 140,
                                height: 140)
         
@@ -186,6 +189,7 @@ class ViewController: UIViewController {
                          trailing: view.safeAreaLayoutGuide.trailingAnchor,
                          marginTop: 20,
                          marginLeading: 40,
+                         marginBottom: 0,
                          marginTrailing: 40,
                          height: 200)
     }
