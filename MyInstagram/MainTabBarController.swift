@@ -12,9 +12,15 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tmpVC = ViewController()
-        let navController = UINavigationController(rootViewController: tmpVC)
+        let layout = UICollectionViewFlowLayout()
+        let userProfileController = UserProfileController(collectionViewLayout: layout)
+        let navController = UINavigationController(rootViewController: userProfileController)
         
-        viewControllers = [navController]
+        navController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
+        navController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+        
+        tabBar.tintColor = .black
+        
+        viewControllers = [navController, UIViewController()]
     }
 }
