@@ -51,17 +51,20 @@ class UserProfileController: UICollectionViewController {
     }
     
     fileprivate func setupLogOutButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOut))
     }
     
-    @objc func handleLogOut() {
+    @objc func handleSignOut() {
         let alertController = UIAlertController(title: nil,
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
-        let logOutAction = UIAlertAction(title: "Log Out", style: .destructive) { (_) in
+        let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] (_) in
             do {
                 try Auth.auth().signOut()
-                #warning("Present SignIn Controller after sign out..Need to implement later on. ")
+                
+                let signInController = SignInController()
+                let navController = UINavigationController(rootViewController: signInController)
+                self?.present(navController, animated: true, completion: nil)
                 
             } catch let signOutErr {
                 print("Failed to sign out: \(signOutErr.localizedDescription)")
@@ -69,7 +72,7 @@ class UserProfileController: UICollectionViewController {
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        alertController.addAction(logOutAction)
+        alertController.addAction(signOutAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }

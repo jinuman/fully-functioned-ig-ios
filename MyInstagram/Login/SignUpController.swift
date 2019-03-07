@@ -152,7 +152,7 @@ class SignUpController: UIViewController {
                 print("Failed to create user: ", err.localizedDescription)
                 return
             }
-            print("\nSuccessfully created user: \(result?.user.uid ?? "")\n")
+            print("\nSuccessfully created user: \(result?.user.uid ?? "")")
             
             guard
                 let self = self,
@@ -190,11 +190,17 @@ class SignUpController: UIViewController {
     
     fileprivate func registerUserIntoDatabase(with uid: String, values: [String: Any]) {
         let reference: DatabaseReference = Database.database().reference()
-        reference.child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+        reference.child("users").updateChildValues(values, withCompletionBlock: { [weak self] (err, ref) in
             if let err = err {
                 print("Failed to save user into database: ", err.localizedDescription)
             }
             print("\nSuccessfully saved user into database.")
+            // Refreshing viewControllers and dismiss
+            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
+                return
+            }
+            mainTabBarController.setupViewControllers()
+            self?.dismiss(animated: true, completion: nil)
         })
     }
     

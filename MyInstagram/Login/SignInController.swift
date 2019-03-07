@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignInController: UIViewController {
     
@@ -34,7 +35,7 @@ class SignInController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-//        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
         return tf
     }()
     
@@ -46,11 +47,11 @@ class SignInController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-//        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
         return tf
     }()
     
-    let signIpButton: UIButton = {
+    let signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -58,7 +59,7 @@ class SignInController: UIViewController {
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.isEnabled = false
-        //        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignIn), for: .touchUpInside)
         return button
     }()
     
@@ -120,8 +121,47 @@ class SignInController: UIViewController {
         navigationController?.pushViewController(signUpController, animated: true)
     }
     
+    @objc func checkForm() {
+        guard
+            let email = emailTextField.text,
+            let password = passwordTextField.text else {
+                return
+        }
+        guard
+            email.isEmpty == false,
+            password.isEmpty == false else {
+                signInButton.isEnabled = false
+                signInButton.backgroundColor = .loginColor
+                return
+        }
+        signInButton.isEnabled = true
+        signInButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
+    }
+    
+    @objc func handleSignIn() {
+        guard
+            let email = emailTextField.text,
+            let password = passwordTextField.text else {
+                print("Sign In: Form is not proper!")
+                return
+        }
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (result, error) in
+            if let error = error {
+                print("Failed to sign in: \(error.localizedDescription)")
+                return
+            }
+            print("\nSuccessfully sign in!: \(email), \(password)")
+            // Refreshing viewControllers and dismiss
+            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
+                return
+            }
+            mainTabBarController.setupViewControllers()
+            self?.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     fileprivate func setupInputFields() {
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signIpButton])
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = 10
