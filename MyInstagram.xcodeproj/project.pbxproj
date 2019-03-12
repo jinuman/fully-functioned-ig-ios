@@ -14,6 +14,7 @@
 		3670D2A3222B7C98002FDAF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3670D2A2222B7C98002FDAF9 /* Assets.xcassets */; };
 		3670D2A6222B7C98002FDAF9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3670D2A4222B7C98002FDAF9 /* LaunchScreen.storyboard */; };
 		3670D2B1222B7C98002FDAF9 /* MyInstagramTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3670D2B0222B7C98002FDAF9 /* MyInstagramTests.swift */; };
+		36ABE0462237BF16008EAFC5 /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ABE0452237BF16008EAFC5 /* PhotoSelectorController.swift */; };
 		36C511F9222BBCDE0071AE8C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 36C511F8222BBCDE0071AE8C /* GoogleService-Info.plist */; };
 		36C511FB222C1DDE0071AE8C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C511FA222C1DDE0071AE8C /* MainTabBarController.swift */; };
 		36C511FD222C1F2E0071AE8C /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C511FC222C1F2E0071AE8C /* UserProfileController.swift */; };
@@ -45,6 +46,7 @@
 		3670D2AC222B7C98002FDAF9 /* MyInstagramTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyInstagramTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3670D2B0222B7C98002FDAF9 /* MyInstagramTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInstagramTests.swift; sourceTree = "<group>"; };
 		3670D2B2222B7C98002FDAF9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36ABE0452237BF16008EAFC5 /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		36C511F8222BBCDE0071AE8C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		36C511FA222C1DDE0071AE8C /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		36C511FC222C1F2E0071AE8C /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		3670D29A222B7C98002FDAF9 /* MyInstagram */ = {
 			isa = PBXGroup;
 			children = (
+				36ABE0442237BEFE008EAFC5 /* AddPhoto */,
 				36C51201222D3A090071AE8C /* Login */,
 				36C511FE222CF1570071AE8C /* UserProfile */,
 				36C511FA222C1DDE0071AE8C /* MainTabBarController.swift */,
@@ -128,6 +131,14 @@
 				3670D2B2222B7C98002FDAF9 /* Info.plist */,
 			);
 			path = MyInstagramTests;
+			sourceTree = "<group>";
+		};
+		36ABE0442237BEFE008EAFC5 /* AddPhoto */ = {
+			isa = PBXGroup;
+			children = (
+				36ABE0452237BF16008EAFC5 /* PhotoSelectorController.swift */,
+			);
+			path = AddPhoto;
 			sourceTree = "<group>";
 		};
 		36C511F7222BBCAB0071AE8C /* Resources */ = {
@@ -350,6 +361,7 @@
 				36544594222B9609006FF627 /* UIKit+MyInstagram.swift in Sources */,
 				36C511FB222C1DDE0071AE8C /* MainTabBarController.swift in Sources */,
 				36C511FD222C1F2E0071AE8C /* UserProfileController.swift in Sources */,
+				36ABE0462237BF16008EAFC5 /* PhotoSelectorController.swift in Sources */,
 				36C51200222CF16D0071AE8C /* UserProfileHeader.swift in Sources */,
 				3670D29C222B7C98002FDAF9 /* AppDelegate.swift in Sources */,
 				36C51203222D3A1D0071AE8C /* SignInController.swift in Sources */,

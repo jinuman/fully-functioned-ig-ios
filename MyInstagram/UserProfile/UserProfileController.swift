@@ -30,6 +30,10 @@ class UserProfileController: UICollectionViewController {
         setupLogOutButton()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     // Event methods
     fileprivate func fetchUserAndSetupTitle() {
         guard let uid = Auth.auth().currentUser?.uid else {
