@@ -33,15 +33,18 @@ class PhotoSelectorController: UICollectionViewController {
         fetchPhotos()
     }
     
-    fileprivate func fetchPhotos() {
+    fileprivate func assetsFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 100
         // 최신꺼부터 불러오기
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchOptions.sortDescriptors = [sortDescriptor]
-        
+        return fetchOptions
+    }
+    
+    fileprivate func fetchPhotos() {
         // Fetch images from device - Photos Framework
-        let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
         allPhotos.enumerateObjects { (asset, count, stop) in
             let imageManager = PHImageManager.default()
