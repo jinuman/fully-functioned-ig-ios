@@ -14,6 +14,7 @@ class PhotoSelectorController: UICollectionViewController {
     let cellId = "cellId"
     let headerId = "headerId"
     var images = [UIImage]()
+    var selectedImage: UIImage?
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {
@@ -25,7 +26,7 @@ class PhotoSelectorController: UICollectionViewController {
         collectionView.register(PhotoSelectorCell.self,
                                 forCellWithReuseIdentifier: cellId)
         
-        collectionView.register(UICollectionViewCell.self,
+        collectionView.register(PhotoSelectorHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerId)
         
@@ -38,9 +39,10 @@ class PhotoSelectorController: UICollectionViewController {
         // 최신꺼부터 불러오기
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchOptions.sortDescriptors = [sortDescriptor]
-        // 디바이스의 이미지들 불러오기 - Photos Framework
+        
+        // Fetch images from device - Photos Framework
         let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        print("allphotos?", allPhotos.count)
+        
         allPhotos.enumerateObjects { (asset, count, stop) in
             let imageManager = PHImageManager.default()
             let targetSize = CGSize(width: 350, height: 350)
@@ -53,8 +55,11 @@ class PhotoSelectorController: UICollectionViewController {
                     let image = image else {
                         return
                 }
-                print("count? ", count)
                 self.images.append(image)
+                
+                if self.selectedImage == nil {
+                    self.selectedImage = image
+                }
                 
                 if count == allPhotos.count - 1 {
                     self.collectionView.reloadData()
@@ -86,7 +91,6 @@ class PhotoSelectorController: UICollectionViewController {
     @objc func handleNext() {
         print("next!")
     }
-    
 }
 
 // Regarding UICollectionViewDelegateFlowLayout
@@ -103,6 +107,12 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         cell.photoImageView.image = images[indexPath.item]
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("indexPath: ", indexPath)
+        selectedImage = images[indexPath.item]
+        collectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -124,10 +134,15 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     
     // header
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        header.backgroundColor = .red
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else {
+            fatalError("Photo Selector Header is bad")
+        }
+        
+        header.headerImageView.image = selectedImage
+        
         return header
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = view.safeAreaLayoutGuide.layoutFrame.width
         return CGSize(width: width, height: width)
