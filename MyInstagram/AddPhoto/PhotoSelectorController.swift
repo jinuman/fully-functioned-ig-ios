@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoSelectorController: UICollectionViewController {
     
     let cellId = "cellId"
     let headerId = "headerId"
+    var images = [UIImage]()
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {
@@ -20,12 +22,45 @@ class PhotoSelectorController: UICollectionViewController {
         collectionView.backgroundColor = .yellow
         setupNavigationItemButtons()
         
-        collectionView.register(UICollectionViewCell.self,
+        collectionView.register(PhotoSelectorCell.self,
                                 forCellWithReuseIdentifier: cellId)
         
         collectionView.register(UICollectionViewCell.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerId)
+        
+        fetchPhotos()
+    }
+    
+    fileprivate func fetchPhotos() {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 100
+        // 최신꺼부터 불러오기
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchOptions.sortDescriptors = [sortDescriptor]
+        // 디바이스의 이미지들 불러오기 - Photos Framework
+        let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        print("allphotos?", allPhotos.count)
+        allPhotos.enumerateObjects { (asset, count, stop) in
+            let imageManager = PHImageManager.default()
+            let targetSize = CGSize(width: 350, height: 350)
+            // PHImageRequestOptions 세팅 안해주면 requestImage가 한번 이미지들을 불러오고, 다시 한번 더 불러오는 현상이 생길 수 있다.
+            let options = PHImageRequestOptions()
+            options.isSynchronous = true
+            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { [weak self] (image, info) in
+                guard
+                    let self = self,
+                    let image = image else {
+                        return
+                }
+                print("count? ", count)
+                self.images.append(image)
+                
+                if count == allPhotos.count - 1 {
+                    self.collectionView.reloadData()
+                }
+            })
+        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -57,12 +92,16 @@ class PhotoSelectorController: UICollectionViewController {
 // Regarding UICollectionViewDelegateFlowLayout
 extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
+        return images.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .blue
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoSelectorCell else {
+            fatalError("Photo Selector Cell is bad")
+        }
+        
+        cell.photoImageView.image = images[indexPath.item]
+        
         return cell
     }
     
