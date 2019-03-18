@@ -13,14 +13,16 @@ class PhotoSelectorController: UICollectionViewController {
     
     let cellId = "cellId"
     let headerId = "headerId"
+    
     var images = [UIImage]()
+    var assets = [PHAsset]()    // Capture assets corresponding images above
     var selectedImage: UIImage?
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.backgroundColor = .yellow
+        collectionView.backgroundColor = .white
         setupNavigationItemButtons()
         
         collectionView.register(PhotoSelectorCell.self,
@@ -46,28 +48,33 @@ class PhotoSelectorController: UICollectionViewController {
         // Fetch images from device - Photos Framework
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
-        allPhotos.enumerateObjects { (asset, count, stop) in
-            let imageManager = PHImageManager.default()
-            let targetSize = CGSize(width: 350, height: 350)
-            // PHImageRequestOptions 세팅 안해주면 requestImage가 한번 이미지들을 불러오고, 다시 한번 더 불러오는 현상이 생길 수 있다.
-            let options = PHImageRequestOptions()
-            options.isSynchronous = true
-            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { [weak self] (image, info) in
-                guard
-                    let self = self,
-                    let image = image else {
-                        return
-                }
-                self.images.append(image)
-                
-                if self.selectedImage == nil {
-                    self.selectedImage = image
-                }
-                
-                if count == allPhotos.count - 1 {
-                    self.collectionView.reloadData()
-                }
-            })
+        DispatchQueue.global(qos: .background).async {
+            allPhotos.enumerateObjects { (asset, count, stop) in
+                let imageManager = PHImageManager.default()
+                let targetSize = CGSize(width: 200, height: 200)    // low quality
+                // PHImageRequestOptions 세팅 안해주면 requestImage가 한번 이미지들을 불러오고, 다시 한번 더 불러오는 현상이 생길 수 있다.
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { [weak self] (image, info) in
+                    guard
+                        let self = self,
+                        let image = image else {
+                            return
+                    }
+                    self.images.append(image)
+                    self.assets.append(asset)
+                    
+                    if self.selectedImage == nil {
+                        self.selectedImage = image
+                    }
+                    
+                    if count == allPhotos.count - 1 {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                })
+            }
         }
     }
     
@@ -113,7 +120,6 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("indexPath: ", indexPath)
         selectedImage = images[indexPath.item]
         collectionView.reloadData()
     }
@@ -135,13 +141,26 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: width)
     }
     
-    // header
+    // Collection View header
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else {
             fatalError("Photo Selector Header is bad")
         }
         
         header.headerImageView.image = selectedImage
+        
+        guard
+            let selectedImage = selectedImage,
+            let index = images.firstIndex(of: selectedImage) else {
+                fatalError("selected images are bad")
+        }
+        let selectedAsset = assets[index]
+        
+        let imageManager = PHImageManager.default()
+        let targetSize = CGSize(width: 600, height: 600)
+        imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
+            header.headerImageView.image = image
+        }
         
         return header
     }
