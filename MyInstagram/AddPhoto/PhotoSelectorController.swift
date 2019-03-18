@@ -99,7 +99,8 @@ class PhotoSelectorController: UICollectionViewController {
     }
     
     @objc func handleNext() {
-        print("next!")
+        let sharePhotoController = SharePhotoController()
+        navigationController?.pushViewController(sharePhotoController, animated: true)
     }
 }
 
@@ -150,19 +151,19 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
             fatalError("Photo Selector Header is bad")
         }
         
-        header.headerImageView.image = selectedImage
-        
-        guard
+        // if selectedImage exist, execute below
+        if
             let selectedImage = selectedImage,
-            let index = images.firstIndex(of: selectedImage) else {
-                fatalError("selected images are bad")
-        }
-        let selectedAsset = assets[index]
-        
-        let imageManager = PHImageManager.default()
-        let targetSize = CGSize(width: 600, height: 600)
-        imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
-            header.headerImageView.image = image
+            let index = images.firstIndex(of: selectedImage) {
+            
+            let selectedAsset = assets[index]
+            
+            let imageManager = PHImageManager.default()
+            
+            let targetSize = CGSize(width: 600, height: 600)
+            imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
+                header.headerImageView.image = image
+            }
         }
         
         return header
