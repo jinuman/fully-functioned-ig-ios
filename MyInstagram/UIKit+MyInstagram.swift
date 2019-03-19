@@ -27,8 +27,8 @@ extension UIView {
                 marginLeading: CGFloat,
                 marginBottom: CGFloat,
                 marginTrailing: CGFloat,
-                width: CGFloat = 0,
-                height: CGFloat = 0) {
+                width: CGFloat,
+                height: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
         

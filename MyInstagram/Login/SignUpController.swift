@@ -225,6 +225,7 @@ class SignUpController: UIViewController {
                          marginLeading: 40,
                          marginBottom: 0,
                          marginTrailing: 40,
+                         width: 0,
                          height: 200)
     }
 

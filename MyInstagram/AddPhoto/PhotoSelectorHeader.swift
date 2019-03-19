@@ -11,7 +11,6 @@ import UIKit
 class PhotoSelectorHeader: UICollectionViewCell {
     let headerImageView: UIImageView = {
         let iv = UIImageView()
-        iv.backgroundColor = .cyan
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv
@@ -25,7 +24,8 @@ class PhotoSelectorHeader: UICollectionViewCell {
                               leading: self.leadingAnchor,
                               bottom: self.bottomAnchor,
                               trailing: self.trailingAnchor,
-                              marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0)
+                              marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0,
+                              width: 0, height: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
