@@ -107,12 +107,12 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
         return cell
     }
     
-    // 행들 간의 간격 return
+    // 행들 간 간격 return
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
     
-    // 행 안에 셀들 간의 간격 return
+    // 행 안에 셀들 간 간격 return
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }

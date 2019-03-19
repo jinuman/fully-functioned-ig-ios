@@ -151,7 +151,8 @@ class SignInController: UIViewController {
                 return
             }
             print("\nSuccessfully sign in!: \(email), \(password)")
-            // Refreshing viewControllers and dismiss
+            
+            // Refresh UI by logged in user and dismiss
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
                 return
             }

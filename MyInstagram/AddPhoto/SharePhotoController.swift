@@ -58,6 +58,7 @@ class SharePhotoController: UIViewController {
         textView.anchor(top: containerView.topAnchor, leading: thumbnailImageView.trailingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, marginTop: 0, marginLeading: 4, marginBottom: 0, marginTrailing: 0, width: 0, height: 0)
     }
     
+    #warning("Need to implement with Firebase")
     @objc func handleShare() {
         print("share")
     }

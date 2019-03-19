@@ -147,6 +147,7 @@ class SignUpController: UIViewController {
                 return
         }
         
+        // 신규 유저 생성
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] (result, err) in
             if let err = err {
                 print("Failed to create user: ", err.localizedDescription)
@@ -162,11 +163,13 @@ class SignUpController: UIViewController {
             }
             let imageName = UUID().uuidString
             let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg")
+            // Save into Storage
             storageRef.putData(uploadData, metadata: nil, completion: { (metadata, err) in
                 if let err = err {
                     print("Failed to upload profile image: ", err.localizedDescription)
                     return
                 }
+                // In order to get image URL
                 storageRef.downloadURL(completion: { [weak self] (url, err) in
                     if let err = err {
                         print("Failed to fetch download url: ", err.localizedDescription)
@@ -180,22 +183,24 @@ class SignUpController: UIViewController {
                     print("\nSuccessfully uploaded profile image: ", profileImageUrl)
                     
                     let dictionaryValues = ["username": username, "profileImageUrl": profileImageUrl]
+                    // child("users").child(uid) is same below
                     let values = [uid: dictionaryValues]
-                    self.registerUserIntoDatabase(with: uid, values: values)
+                    self.signUpUserIntoDatabase(with: uid, values: values)
                 })
             })
             
         }
     }
     
-    fileprivate func registerUserIntoDatabase(with uid: String, values: [String: Any]) {
+    fileprivate func signUpUserIntoDatabase(with uid: String, values: [String: Any]) {
         let reference: DatabaseReference = Database.database().reference()
         reference.child("users").updateChildValues(values, withCompletionBlock: { [weak self] (err, ref) in
             if let err = err {
                 print("Failed to save user into database: ", err.localizedDescription)
             }
             print("\nSuccessfully saved user into database.")
-            // Refreshing viewControllers and dismiss
+            // Because of new user
+            // Refresh UI and dismiss
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
                 return
             }

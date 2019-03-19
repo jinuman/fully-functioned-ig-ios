@@ -26,6 +26,7 @@ class MainTabBarController: UITabBarController {
         setupViewControllers()
     }
     
+    // Refresh UI by logged in user.
     func setupViewControllers() {
         let rootController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         let homeNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "home_unselected"),
