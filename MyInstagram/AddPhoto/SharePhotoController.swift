@@ -17,6 +17,12 @@ class SharePhotoController: UIViewController {
         return iv
     }()
     
+    let textView: UITextView = {
+        let tv = UITextView()
+        tv.font = UIFont.systemFont(ofSize: 14)
+        return tv
+    }()
+    
     var selectedImage: UIImage? {
         didSet {
             self.thumbnailImageView.image = selectedImage
@@ -47,6 +53,9 @@ class SharePhotoController: UIViewController {
         
         containerView.addSubview(thumbnailImageView)
         thumbnailImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: nil, marginTop: 8, marginLeading: 8, marginBottom: 8, marginTrailing: 0, width: 84, height: 0)
+        
+        containerView.addSubview(textView)
+        textView.anchor(top: containerView.topAnchor, leading: thumbnailImageView.trailingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, marginTop: 0, marginLeading: 4, marginBottom: 0, marginTrailing: 0, width: 0, height: 0)
     }
     
     @objc func handleShare() {
