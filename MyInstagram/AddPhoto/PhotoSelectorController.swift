@@ -18,6 +18,8 @@ class PhotoSelectorController: UICollectionViewController {
     var assets = [PHAsset]()    // Capture assets corresponding images above
     var selectedImage: UIImage?
     
+    var header: PhotoSelectorHeader?
+    
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +102,7 @@ class PhotoSelectorController: UICollectionViewController {
     
     @objc func handleNext() {
         let sharePhotoController = SharePhotoController()
+        sharePhotoController.selectedImage = header?.headerImageView.image
         navigationController?.pushViewController(sharePhotoController, animated: true)
     }
 }
@@ -150,6 +153,8 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else {
             fatalError("Photo Selector Header is bad")
         }
+        
+        self.header = header
         
         // if selectedImage exist, execute below
         if
