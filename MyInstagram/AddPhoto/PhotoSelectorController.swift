@@ -37,6 +37,10 @@ class PhotoSelectorController: UICollectionViewController {
         fetchPhotos()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     fileprivate func assetsFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 100
@@ -78,10 +82,6 @@ class PhotoSelectorController: UICollectionViewController {
                 })
             }
         }
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     override var prefersStatusBarHidden: Bool {

@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import MyInstagram
 
 class MyInstagramTests: XCTestCase {
 
