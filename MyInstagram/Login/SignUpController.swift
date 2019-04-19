@@ -12,14 +12,14 @@ import Firebase
 class SignUpController: UIViewController {
 
     // MARK:- Screen properties
-    let plusPhotoButton: UIButton = {
+    private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return button
     }()
     
-    let emailTextField: UITextField = {
+    private let emailTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -29,7 +29,7 @@ class SignUpController: UIViewController {
         return tf
     }()
     
-    let usernameTextField: UITextField = {
+    private let usernameTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Username"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -39,7 +39,7 @@ class SignUpController: UIViewController {
         return tf
     }()
     
-    let passwordTextField: UITextField = {
+    private let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.isSecureTextEntry = true
         tf.textContentType = .password
@@ -51,7 +51,7 @@ class SignUpController: UIViewController {
         return tf
     }()
     
-    let signUpButton: UIButton = {
+    private let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -63,7 +63,7 @@ class SignUpController: UIViewController {
         return button
     }()
     
-    let alreadyHaveAccountButton: UIButton = {
+    private let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         
         let attributedTitle = NSMutableAttributedString(string: "Already hava an account?  ",
@@ -80,40 +80,12 @@ class SignUpController: UIViewController {
     // MARK:- Life cycle methods need super call of itself.
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
-        view.addSubview(plusPhotoButton)
-        
-        // x, y, w, h
-        NSLayoutConstraint.activate([
-            plusPhotoButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
-            ])
-        plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                               leading: nil,
-                               bottom: nil,
-                               trailing: nil,
-                               marginTop: 40,
-                               marginLeading: 0,
-                               marginBottom: 0,
-                               marginTrailing: 0,
-                               width: 140,
-                               height: 140)
-        setupInputFields()
-        view.addSubview(alreadyHaveAccountButton)
-        alreadyHaveAccountButton.anchor(top: nil,
-                                     leading: view.safeAreaLayoutGuide.leadingAnchor,
-                                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                                     trailing: view.safeAreaLayoutGuide.trailingAnchor,
-                                     marginTop: 0,
-                                     marginLeading: 0,
-                                     marginBottom: 0,
-                                     marginTrailing: 0,
-                                     width: 0,
-                                     height: 50)
+        setupSubviewsForSignUp()
     }
     
     // MARK:- Event handling methods
-    @objc func validationCheckForSignUp() {
+    @objc fileprivate func validationCheckForSignUp() {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
@@ -132,14 +104,14 @@ class SignUpController: UIViewController {
         signUpButton.backgroundColor = UIColor(r: 17, g: 154, b: 237)
     }
     
-    @objc func handlePlusPhoto() {
+    @objc fileprivate func handlePlusPhoto() {
         let imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         present(imagePicker, animated: true, completion: nil)
     }
     
-    @objc func handleSignUp() {
+    @objc fileprivate func handleSignUp() {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
@@ -173,6 +145,7 @@ class SignUpController: UIViewController {
                 storageRef.downloadURL(completion: { [weak self] (url, err) in
                     if let err = err {
                         print("Failed to fetch download url: ", err.localizedDescription)
+                        return
                     }
                     guard
                         let self = self,
@@ -197,10 +170,11 @@ class SignUpController: UIViewController {
         reference.child("users").updateChildValues(values, withCompletionBlock: { [weak self] (err, ref) in
             if let err = err {
                 print("Failed to save user into database: ", err.localizedDescription)
+                return
             }
             print("\nSuccessfully saved user into database.")
-            // Because of new user
-            // Refresh UI and dismiss
+            
+            // Because of new user, refresh UI and dismiss
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
                 return
             }
@@ -209,29 +183,43 @@ class SignUpController: UIViewController {
         })
     }
     
-    @objc func handleAlreadyHaveAccount() {
-        _ = navigationController?.popViewController(animated: true)
+    @objc fileprivate func handleAlreadyHaveAccount() {
+        navigationController?.popViewController(animated: true)
     }
 
-    // MARK:- Setting up layouts methods
-    fileprivate func setupInputFields() {
+    // MARK:- Setup screen constraints method
+    fileprivate func setupSubviewsForSignUp() {
+        let guide = view.safeAreaLayoutGuide
+        [plusPhotoButton, alreadyHaveAccountButton].forEach {
+            view.addSubview($0)
+        }
+        
+        NSLayoutConstraint.activate([
+            plusPhotoButton.centerXAnchor.constraint(equalTo: guide.centerXAnchor)
+            ])
+        plusPhotoButton.anchor(top: guide.topAnchor, leading: nil, bottom: nil, trailing: nil,
+                               padding: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0),
+                               size: CGSize(width: 140, height: 140))
+        
         let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
         view.addSubview(stackView)
-        
+
         stackView.anchor(top: plusPhotoButton.bottomAnchor,
-                         leading: view.safeAreaLayoutGuide.leadingAnchor,
+                         leading: guide.leadingAnchor,
                          bottom: nil,
-                         trailing: view.safeAreaLayoutGuide.trailingAnchor,
-                         marginTop: 20,
-                         marginLeading: 40,
-                         marginBottom: 0,
-                         marginTrailing: 40,
-                         width: 0,
-                         height: 200)
+                         trailing: guide.trailingAnchor,
+                         padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40),
+                         size: CGSize(width: 0, height: 200))
+        
+        alreadyHaveAccountButton.anchor(top: nil,
+                                        leading: guide.leadingAnchor,
+                                        bottom: guide.bottomAnchor,
+                                        trailing: guide.trailingAnchor,
+                                        size: CGSize(width: 0, height: 50))
     }
 
 }

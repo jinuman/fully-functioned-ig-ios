@@ -136,7 +136,7 @@ class SignInController: UIViewController {
         }
     }
     
-    // MARK:- Setup screent constraints method
+    // MARK:- Setup screen constraints method
     fileprivate func setupSubviewsForSignIn() {
         [logoContainerView, dontHaveAccountButton].forEach {
             view.addSubview($0)
