@@ -10,20 +10,37 @@ import UIKit
 import Firebase
 
 class MainTabBarController: UITabBarController {
+    
+    // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.delegate = self    // UITabBarControllerDelegate
         
+        checkUserIsLoggedIn()
+        setupViewControllers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        checkUserIsLoggedIn()
+        setupViewControllers()
+    }
+    
+    deinit {
+        print("MainTabBarController \(#function)")
+    }
+    
+    // MARK:- Handling methods
+    fileprivate func checkUserIsLoggedIn() {
+        // if user is not logged in
         if Auth.auth().currentUser == nil {
-            // if user is not logged in
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.async {
                 let signInController = SignInController()
                 let navController = UINavigationController(rootViewController: signInController)
-                self?.present(navController, animated: true, completion: nil)
+                self.present(navController, animated: true, completion: nil)
             }
             return
         }
-        setupViewControllers()
     }
     
     // Refresh UI by logged in user.
