@@ -25,7 +25,7 @@ class SignUpController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validationCheckForSignUp), for: .editingChanged)
         return tf
     }()
     
@@ -35,7 +35,7 @@ class SignUpController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validationCheckForSignUp), for: .editingChanged)
         return tf
     }()
     
@@ -47,7 +47,7 @@ class SignUpController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validationCheckForSignUp), for: .editingChanged)
         return tf
     }()
     
@@ -113,7 +113,7 @@ class SignUpController: UIViewController {
     }
     
     // MARK:- Event handling methods
-    @objc func checkForm() {
+    @objc func validationCheckForSignUp() {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,

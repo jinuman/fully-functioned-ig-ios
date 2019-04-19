@@ -51,10 +51,12 @@ class SharePhotoController: UIViewController {
         view.addSubview(containerView)
         containerView.anchor(top: guide.topAnchor, leading: guide.leadingAnchor, bottom: nil, trailing: guide.trailingAnchor, marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0, width: 0, height: 100)
         
-        containerView.addSubview(thumbnailImageView)
-        thumbnailImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: nil, marginTop: 8, marginLeading: 8, marginBottom: 8, marginTrailing: 0, width: 84, height: 0)
+        [thumbnailImageView, textView].forEach {
+            containerView.addSubview($0)
+        }
         
-        containerView.addSubview(textView)
+        thumbnailImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: nil, marginTop: 8, marginLeading: 8, marginBottom: 8, marginTrailing: 0, width: 84, height: 0)
+
         textView.anchor(top: containerView.topAnchor, leading: thumbnailImageView.trailingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, marginTop: 0, marginLeading: 4, marginBottom: 0, marginTrailing: 0, width: 0, height: 0)
     }
     

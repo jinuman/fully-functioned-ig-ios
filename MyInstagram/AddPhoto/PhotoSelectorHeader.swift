@@ -20,12 +20,13 @@ class PhotoSelectorHeader: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(headerImageView)
-        headerImageView.anchor(top: self.topAnchor,
-                              leading: self.leadingAnchor,
-                              bottom: self.bottomAnchor,
-                              trailing: self.trailingAnchor,
-                              marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0,
-                              width: 0, height: 0)
+//        headerImageView.anchor(top: self.topAnchor,
+//                              leading: self.leadingAnchor,
+//                              bottom: self.bottomAnchor,
+//                              trailing: self.trailingAnchor,
+//                              marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0,
+//                              width: 0, height: 0)
+        headerImageView.fillSuperview()
     }
     
     required init?(coder aDecoder: NSCoder) {

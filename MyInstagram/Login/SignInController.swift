@@ -12,34 +12,35 @@ import Firebase
 class SignInController: UIViewController {
     
     // MARK:- Screen properties
-    let logoContainerView: UIView = {
-        let view = UIView()
+    private let logoContainerView: UIView = {
+        let containerView = UIView()
         
         let logoImageView = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.contentMode = .scaleAspectFill
-        view.addSubview(logoImageView)
         
-        logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 10).isActive = true
+        containerView.addSubview(logoImageView)
+        
+        logoImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: 10).isActive = true
         logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         logoImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        view.backgroundColor = UIColor(r: 0, g: 120, b: 175)
-        return view
+        containerView.backgroundColor = UIColor(r: 0, g: 120, b: 175)
+        return containerView
     }()
     
-    let emailTextField: UITextField = {
+    private let emailTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validationCheckForSignIn), for: .editingChanged)
         return tf
     }()
     
-    let passwordTextField: UITextField = {
+    private let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.isSecureTextEntry = true
         tf.textContentType = .password
@@ -47,11 +48,11 @@ class SignInController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        tf.addTarget(self, action: #selector(checkForm), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validationCheckForSignIn), for: .editingChanged)
         return tf
     }()
     
-    let signInButton: UIButton = {
+    private let signInButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -63,7 +64,7 @@ class SignInController: UIViewController {
         return button
     }()
     
-    let dontHaveAccountButton: UIButton = {
+    private let dontHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         
         let attributedTitle = NSMutableAttributedString(string: "Don't hava an account?  ",
@@ -84,44 +85,18 @@ class SignInController: UIViewController {
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.isNavigationBarHidden = true
-        
         view.backgroundColor = .white
-        
-        view.addSubview(logoContainerView)
-        logoContainerView.anchor(top: view.topAnchor,
-                                 leading: view.leadingAnchor,
-                                 bottom: nil,
-                                 trailing: view.trailingAnchor,
-                                 marginTop: 0,
-                                 marginLeading: 0,
-                                 marginBottom: 0,
-                                 marginTrailing: 0,
-                                 width: 0,
-                                 height: 150)
-        
-        setupInputFields()
-        
-        view.addSubview(dontHaveAccountButton)
-        dontHaveAccountButton.anchor(top: nil,
-                            leading: view.safeAreaLayoutGuide.leadingAnchor,
-                            bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                            trailing: view.safeAreaLayoutGuide.trailingAnchor,
-                            marginTop: 0,
-                            marginLeading: 0,
-                            marginBottom: 0,
-                            marginTrailing: 0,
-                            width: 0,
-                            height: 50)
+        navigationController?.isNavigationBarHidden = true
+        setupSubviewsForSignIn()
     }
     
+    // MARK:- Handling methods
     @objc func handleDontHaveAccount() {
         let signUpController = SignUpController()
         navigationController?.pushViewController(signUpController, animated: true)
     }
     
-    @objc func checkForm() {
+    @objc func validationCheckForSignIn() {
         guard
             let email = emailTextField.text,
             let password = passwordTextField.text else {
@@ -161,7 +136,20 @@ class SignInController: UIViewController {
         }
     }
     
-    fileprivate func setupInputFields() {
+    // MARK:- Setup screent constraints method
+    fileprivate func setupSubviewsForSignIn() {
+        [logoContainerView, dontHaveAccountButton].forEach {
+            view.addSubview($0)
+        }
+        let guide = view.safeAreaLayoutGuide
+
+        logoContainerView.anchor(top: view.topAnchor,
+                                 leading: view.leadingAnchor,
+                                 bottom: nil,
+                                 trailing: view.trailingAnchor,
+                                 padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+                                 size: CGSize(width: 0, height: 150))
+        
         let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -170,14 +158,16 @@ class SignInController: UIViewController {
         view.addSubview(stackView)
         
         stackView.anchor(top: logoContainerView.bottomAnchor,
-                         leading: view.safeAreaLayoutGuide.leadingAnchor,
+                         leading: guide.leadingAnchor,
                          bottom: nil,
-                         trailing: view.safeAreaLayoutGuide.trailingAnchor,
-                         marginTop: 40,
-                         marginLeading: 40,
-                         marginBottom: 0,
-                         marginTrailing: 40,
-                         width: 0,
-                         height: 140)
+                         trailing: guide.trailingAnchor,
+                         padding: UIEdgeInsets(top: 40, left: 40, bottom: 0, right: 40),
+                         size: CGSize(width: 0, height: 140))
+        
+        dontHaveAccountButton.anchor(top: nil,
+                                     leading: guide.leadingAnchor,
+                                     bottom: guide.bottomAnchor,
+                                     trailing: guide.trailingAnchor,
+                                     size: CGSize(width: 0, height: 50))
     }
 }
