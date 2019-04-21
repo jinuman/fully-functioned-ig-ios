@@ -11,9 +11,9 @@ import Firebase
 
 class UserProfileController: UICollectionViewController {
     
-    let headerId = "headerId"
-    let cellId = "cellId"
-    var user: User?
+    private let headerId = "headerId"
+    private let cellId = "cellId"
+    private var user: User?
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {

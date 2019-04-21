@@ -12,7 +12,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     var user: User? {
         didSet {
-            setupProfileImage()
+            fetchProfileImage()
             usernameLabel.text = user?.username
         }
     }
@@ -109,73 +109,35 @@ class UserProfileHeader: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(profileImageView)
-        profileImageView.anchor(top: self.topAnchor,
-                                leading: self.leadingAnchor,
-                                bottom: nil,
-                                trailing: nil,
-                                marginTop: 12,
-                                marginLeading: 12,
-                                marginBottom: 0,
-                                marginTrailing: 0,
-                                width: 80,
-                                height: 80)
-        
-        profileImageView.layer.cornerRadius = 80 / 2
-        profileImageView.clipsToBounds = true
+        setupProfileImageView()
         
         setupBottomToolbar()
         
         addSubview(usernameLabel)
-        
         usernameLabel.anchor(top: profileImageView.bottomAnchor,
                              leading: self.leadingAnchor,
                              bottom: gridButton.topAnchor,
                              trailing: self.trailingAnchor,
-                             marginTop: 4,
-                             marginLeading: 24,
-                             marginBottom: 4,
-                             marginTrailing: 24,
-                             width: 0,
-                             height: 0)
+                             padding: UIEdgeInsets(top: 4, left: 24, bottom: 4, right: 24))
         
         setupUserStatsView()
+        
         addSubview(editProfileButton)
         editProfileButton.anchor(top: postsLabel.bottomAnchor,
                                  leading: postsLabel.leadingAnchor,
                                  bottom: nil,
                                  trailing: followingLabel.trailingAnchor,
-                                 marginTop: 2,
-                                 marginLeading: 0,
-                                 marginBottom: 0,
-                                 marginTrailing: 0,
-                                 width: 0,
-                                 height: 34)
+                                 padding: UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0),
+                                 size: CGSize(width: 0, height: 34))
     }
     
-    fileprivate func setupProfileImage() {
-        guard
-            let profileImageUrl = user?.profileImageUrl ,
-            let url = URL(string: profileImageUrl) else {
-                return
-        }
-        URLSession.shared.dataTask(with: url) { [weak self] (data, response, err) in
-            // check for the error first. then construct the image by using data.
-            if let err = err {
-                print("Failed to fetch profile image: \(err.localizedDescription)")
-                return
-            }
-            // perhaps check for response status of 200 (HTTP OK)..
-            
-            guard let data = data else {
-                return
-            }
-            let image = UIImage(data: data)
-            // need to get back onto the main UI thread
-            DispatchQueue.main.async {
-                self?.profileImageView.image = image
-            }
-            print("\nSuccessfully fetch profile image: \(profileImageUrl)")
-            }.resume()
+    // MARK:- Screen methods
+    fileprivate func setupProfileImageView() {
+        profileImageView.anchor(top: self.topAnchor,
+                                leading: self.leadingAnchor,
+                                bottom: nil,
+                                trailing: nil, padding: UIEdgeInsets(top: 12, left: 12, bottom: 0, right: 0),
+                                size: CGSize(width: 80, height: 80))
     }
     
     fileprivate func setupBottomToolbar() {
@@ -189,42 +151,27 @@ class UserProfileHeader: UICollectionViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         
-        addSubview(stackView)
-        addSubview(topSeparatorView)
-        addSubview(bottomSeparatorView)
+        [stackView, topSeparatorView, bottomSeparatorView].forEach {
+            addSubview($0)
+        }
         
         stackView.anchor(top: nil,
                          leading: self.leadingAnchor,
                          bottom: self.bottomAnchor,
                          trailing: self.trailingAnchor,
-                         marginTop: 0,
-                         marginLeading: 0,
-                         marginBottom: 0,
-                         marginTrailing: 0,
-                         width: 0,
-                         height: 50)
+                         size: CGSize(width: 0, height: 50))
         
         topSeparatorView.anchor(top: stackView.topAnchor,
-                              leading: self.leadingAnchor,
-                              bottom: nil,
-                              trailing: self.trailingAnchor,
-                              marginTop: 0,
-                              marginLeading: 0,
-                              marginBottom: 0,
-                              marginTrailing: 0,
-                              width: 0,
-                              height: 0.5)
+                                leading: self.leadingAnchor,
+                                bottom: nil,
+                                trailing: self.trailingAnchor,
+                                size: CGSize(width: 0, height: 0.5))
         
         bottomSeparatorView.anchor(top: stackView.bottomAnchor,
-                                   leading: self.leadingAnchor,
-                                   bottom: nil,
-                                   trailing: self.trailingAnchor,
-                                   marginTop: 0,
-                                   marginLeading: 0,
-                                   marginBottom: 0,
-                                   marginTrailing: 0,
-                                   width: 0,
-                                   height: 0.5)
+                                leading: self.leadingAnchor,
+                                bottom: nil,
+                                trailing: self.trailingAnchor,
+                                size: CGSize(width: 0, height: 0.5))
     }
     
     fileprivate func setupUserStatsView() {
@@ -237,12 +184,16 @@ class UserProfileHeader: UICollectionViewCell {
                          leading: profileImageView.trailingAnchor,
                          bottom: nil,
                          trailing: self.trailingAnchor,
-                         marginTop: 12,
-                         marginLeading: 12,
-                         marginBottom: 0,
-                         marginTrailing: 12,
-                         width: 0,
-                         height: 50)
+                         padding: UIEdgeInsets(top: 12, left: 12, bottom: 0, right: 12),
+                         size: CGSize(width: 0, height: 50))
+
+    }
+    
+    fileprivate func fetchProfileImage() {
+        profileImageView.layer.cornerRadius =  profileImageView.frame.width / 2
+        profileImageView.clipsToBounds = true
+        guard let profileImageUrl = user?.profileImageUrl else { return }
+        profileImageView.loadImageUsingCache(with: profileImageUrl)
     }
     
     required init?(coder aDecoder: NSCoder) {
