@@ -84,6 +84,41 @@ class SignUpController: UIViewController {
         setupSubviewsForSignUp()
     }
     
+    // MARK:- Setup screen constraints method
+    fileprivate func setupSubviewsForSignUp() {
+        let guide = view.safeAreaLayoutGuide
+        [plusPhotoButton, alreadyHaveAccountButton].forEach {
+            view.addSubview($0)
+        }
+        
+        NSLayoutConstraint.activate([
+            plusPhotoButton.centerXAnchor.constraint(equalTo: guide.centerXAnchor)
+            ])
+        plusPhotoButton.anchor(top: guide.topAnchor, leading: nil, bottom: nil, trailing: nil,
+                               padding: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0),
+                               size: CGSize(width: 140, height: 140))
+        
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        
+        view.addSubview(stackView)
+        
+        stackView.anchor(top: plusPhotoButton.bottomAnchor,
+                         leading: guide.leadingAnchor,
+                         bottom: nil,
+                         trailing: guide.trailingAnchor,
+                         padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40),
+                         size: CGSize(width: 0, height: 200))
+        
+        alreadyHaveAccountButton.anchor(top: nil,
+                                        leading: guide.leadingAnchor,
+                                        bottom: guide.bottomAnchor,
+                                        trailing: guide.trailingAnchor,
+                                        size: CGSize(width: 0, height: 50))
+    }
+    
     // MARK:- Event handling methods
     @objc fileprivate func validationCheckForSignUp() {
         guard
@@ -186,42 +221,6 @@ class SignUpController: UIViewController {
     @objc fileprivate func handleAlreadyHaveAccount() {
         navigationController?.popViewController(animated: true)
     }
-
-    // MARK:- Setup screen constraints method
-    fileprivate func setupSubviewsForSignUp() {
-        let guide = view.safeAreaLayoutGuide
-        [plusPhotoButton, alreadyHaveAccountButton].forEach {
-            view.addSubview($0)
-        }
-        
-        NSLayoutConstraint.activate([
-            plusPhotoButton.centerXAnchor.constraint(equalTo: guide.centerXAnchor)
-            ])
-        plusPhotoButton.anchor(top: guide.topAnchor, leading: nil, bottom: nil, trailing: nil,
-                               padding: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0),
-                               size: CGSize(width: 140, height: 140))
-        
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
-
-        stackView.anchor(top: plusPhotoButton.bottomAnchor,
-                         leading: guide.leadingAnchor,
-                         bottom: nil,
-                         trailing: guide.trailingAnchor,
-                         padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40),
-                         size: CGSize(width: 0, height: 200))
-        
-        alreadyHaveAccountButton.anchor(top: nil,
-                                        leading: guide.leadingAnchor,
-                                        bottom: guide.bottomAnchor,
-                                        trailing: guide.trailingAnchor,
-                                        size: CGSize(width: 0, height: 50))
-    }
-
 }
 
 // MARK:- Regarding Image Picker Controller

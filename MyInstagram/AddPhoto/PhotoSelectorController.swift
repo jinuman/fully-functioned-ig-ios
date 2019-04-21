@@ -20,6 +20,10 @@ class PhotoSelectorController: UICollectionViewController {
     
     var header: PhotoSelectorHeader?
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,18 +31,41 @@ class PhotoSelectorController: UICollectionViewController {
         collectionView.backgroundColor = .white
         setupNavigationItemButtons()
         
-        collectionView.register(PhotoSelectorCell.self,
-                                forCellWithReuseIdentifier: cellId)
-        
         collectionView.register(PhotoSelectorHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerId)
         
+        collectionView.register(PhotoSelectorCell.self,
+                                forCellWithReuseIdentifier: cellId)
         fetchPhotos()
+    }
+    
+    deinit {
+        print("PhotoSelectorController \(#function)")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    // MARK:- Screen methods
+    fileprivate func setupNavigationItemButtons() {
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain,
+                                                           target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain,
+                                                            target: self, action: #selector(handleNext))
+    }
+    
+    // MARK:- Handling methods
+    @objc func handleCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handleNext() {
+        let sharePhotoController = SharePhotoController()
+        sharePhotoController.selectedImage = header?.headerImageView.image
+        navigationController?.pushViewController(sharePhotoController, animated: true)
     }
     
     fileprivate func assetsFetchOptions() -> PHFetchOptions {
@@ -54,12 +81,14 @@ class PhotoSelectorController: UICollectionViewController {
         // Fetch images from device - Photos Framework
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             allPhotos.enumerateObjects { (asset, count, stop) in
                 let imageManager = PHImageManager.default()
                 let targetSize = CGSize(width: 200, height: 200)    // low quality
-                // PHImageRequestOptions 세팅 안해주면 requestImage가 한번 이미지들을 불러오고, 다시 한번 더 불러오는 현상이 생길 수 있다.
+                
+                
                 let options = PHImageRequestOptions()
+                // 이 옵션을 안해주면 requestImage가 한번 이미지들을 불러오고, 다시 한번 더 불러오는 현상이 생길 수 있다.
                 options.isSynchronous = true
                 imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { [weak self] (image, info) in
                     guard
@@ -83,31 +112,9 @@ class PhotoSelectorController: UICollectionViewController {
             }
         }
     }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    fileprivate func setupNavigationItemButtons() {
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain,
-                                                           target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain,
-                                                            target: self, action: #selector(handleNext))
-    }
-    
-    @objc func handleCancel() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func handleNext() {
-        let sharePhotoController = SharePhotoController()
-        sharePhotoController.selectedImage = header?.headerImageView.image
-        navigationController?.pushViewController(sharePhotoController, animated: true)
-    }
 }
 
-// Regarding UICollectionViewDelegateFlowLayout
+// MARK:- Regarding collectionView
 extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
@@ -156,7 +163,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         
         self.header = header
         
-        // if selectedImage exist, execute below
+        // if selectedImage exist
         if
             let selectedImage = selectedImage,
             let index = images.firstIndex(of: selectedImage) {
@@ -164,7 +171,6 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
             let selectedAsset = assets[index]
             
             let imageManager = PHImageManager.default()
-            
             let targetSize = CGSize(width: 600, height: 600)
             imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .default, options: nil) { (image, info) in
                 header.headerImageView.image = image
@@ -175,7 +181,8 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let width = view.safeAreaLayoutGuide.layoutFrame.width
+        let guide = view.safeAreaLayoutGuide
+        let width = guide.layoutFrame.width
         return CGSize(width: width, height: width)
     }
 }

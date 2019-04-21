@@ -90,6 +90,41 @@ class SignInController: UIViewController {
         setupSubviewsForSignIn()
     }
     
+    // MARK:- Setup screen constraints method
+    fileprivate func setupSubviewsForSignIn() {
+        [logoContainerView, dontHaveAccountButton].forEach {
+            view.addSubview($0)
+        }
+        let guide = view.safeAreaLayoutGuide
+        
+        logoContainerView.anchor(top: view.topAnchor,
+                                 leading: view.leadingAnchor,
+                                 bottom: nil,
+                                 trailing: view.trailingAnchor,
+                                 padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
+                                 size: CGSize(width: 0, height: 150))
+        
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        
+        view.addSubview(stackView)
+        
+        stackView.anchor(top: logoContainerView.bottomAnchor,
+                         leading: guide.leadingAnchor,
+                         bottom: nil,
+                         trailing: guide.trailingAnchor,
+                         padding: UIEdgeInsets(top: 40, left: 40, bottom: 0, right: 40),
+                         size: CGSize(width: 0, height: 140))
+        
+        dontHaveAccountButton.anchor(top: nil,
+                                     leading: guide.leadingAnchor,
+                                     bottom: guide.bottomAnchor,
+                                     trailing: guide.trailingAnchor,
+                                     size: CGSize(width: 0, height: 50))
+    }
+    
     // MARK:- Handling methods
     @objc func handleDontHaveAccount() {
         let signUpController = SignUpController()
@@ -134,40 +169,5 @@ class SignInController: UIViewController {
             mainTabBarController.setupViewControllers()
             self?.dismiss(animated: true, completion: nil)
         }
-    }
-    
-    // MARK:- Setup screen constraints method
-    fileprivate func setupSubviewsForSignIn() {
-        [logoContainerView, dontHaveAccountButton].forEach {
-            view.addSubview($0)
-        }
-        let guide = view.safeAreaLayoutGuide
-
-        logoContainerView.anchor(top: view.topAnchor,
-                                 leading: view.leadingAnchor,
-                                 bottom: nil,
-                                 trailing: view.trailingAnchor,
-                                 padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
-                                 size: CGSize(width: 0, height: 150))
-        
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
-        
-        stackView.anchor(top: logoContainerView.bottomAnchor,
-                         leading: guide.leadingAnchor,
-                         bottom: nil,
-                         trailing: guide.trailingAnchor,
-                         padding: UIEdgeInsets(top: 40, left: 40, bottom: 0, right: 40),
-                         size: CGSize(width: 0, height: 140))
-        
-        dontHaveAccountButton.anchor(top: nil,
-                                     leading: guide.leadingAnchor,
-                                     bottom: guide.bottomAnchor,
-                                     trailing: guide.trailingAnchor,
-                                     size: CGSize(width: 0, height: 50))
     }
 }

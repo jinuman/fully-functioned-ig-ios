@@ -30,18 +30,7 @@ class MainTabBarController: UITabBarController {
         print("MainTabBarController \(#function)")
     }
     
-    // MARK:- Handling methods
-    fileprivate func checkUserIsLoggedIn() {
-        // if user is not logged in
-        if Auth.auth().currentUser == nil {
-            DispatchQueue.main.async {
-                let signInController = SignInController()
-                let navController = UINavigationController(rootViewController: signInController)
-                self.present(navController, animated: true, completion: nil)
-            }
-            return
-        }
-    }
+    // MARK:- Regarding screen methods
     
     // Refresh UI by logged in user.
     func setupViewControllers() {
@@ -84,6 +73,19 @@ class MainTabBarController: UITabBarController {
         navController.tabBarItem.image = unselectedImage
         navController.tabBarItem.selectedImage = selectedImage
         return navController
+    }
+    
+    // MARK:- Handling methods
+    fileprivate func checkUserIsLoggedIn() {
+        // if user is not logged in
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let signInController = SignInController()
+                let navController = UINavigationController(rootViewController: signInController)
+                self.present(navController, animated: true, completion: nil)
+            }
+            return
+        }
     }
 }
 

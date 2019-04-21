@@ -17,7 +17,7 @@ class SharePhotoController: UIViewController {
         return iv
     }()
     
-    let textView: UITextView = {
+    let captionTextView: UITextView = {
         let tv = UITextView()
         tv.font = UIFont.systemFont(ofSize: 14)
         return tv
@@ -40,24 +40,38 @@ class SharePhotoController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(handleShare))
         
-        setupImageAndTextView()
+        setupSubviews()
     }
     
-    fileprivate func setupImageAndTextView() {
+    fileprivate func setupSubviews() {
         let guide = view.safeAreaLayoutGuide
         let containerView = UIView()
         containerView.backgroundColor = .white
         
         view.addSubview(containerView)
-        containerView.anchor(top: guide.topAnchor, leading: guide.leadingAnchor, bottom: nil, trailing: guide.trailingAnchor, marginTop: 0, marginLeading: 0, marginBottom: 0, marginTrailing: 0, width: 0, height: 100)
         
-        [thumbnailImageView, textView].forEach {
+        containerView.anchor(top: guide.topAnchor,
+                             leading: guide.leadingAnchor,
+                             bottom: nil,
+                             trailing: guide.trailingAnchor,
+                             size: CGSize(width: 0, height: 100))
+        
+        [thumbnailImageView, captionTextView].forEach {
             containerView.addSubview($0)
         }
         
-        thumbnailImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: nil, marginTop: 8, marginLeading: 8, marginBottom: 8, marginTrailing: 0, width: 84, height: 0)
-
-        textView.anchor(top: containerView.topAnchor, leading: thumbnailImageView.trailingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, marginTop: 0, marginLeading: 4, marginBottom: 0, marginTrailing: 0, width: 0, height: 0)
+        thumbnailImageView.anchor(top: containerView.topAnchor,
+                                  leading: containerView.leadingAnchor,
+                                  bottom: containerView.bottomAnchor,
+                                  trailing: nil,
+                                  padding: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 0),
+                                  size: CGSize(width: 84, height: 0))
+        
+        captionTextView.anchor(top: containerView.topAnchor,
+                                   leading: thumbnailImageView.trailingAnchor,
+                                   bottom: containerView.bottomAnchor,
+                                   trailing: containerView.trailingAnchor,
+                                   padding: UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0))
     }
     
     #warning("Need to implement with Firebase")
