@@ -152,7 +152,7 @@ class SignInController: UIViewController {
         guard
             let email = emailTextField.text,
             let password = passwordTextField.text else {
-                print("Sign In: Form is not proper!")
+                print("Sign In: Form is not proper.")
                 return
         }
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] (result, error) in
