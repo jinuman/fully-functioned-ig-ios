@@ -12,16 +12,17 @@ class UserProfileHeader: UICollectionViewCell {
     
     var user: User? {
         didSet {
-            fetchProfileImage()
+            guard let imageUrl = user?.profileImageUrl else { return }
+            profileImageView.loadImage(with: imageUrl)
             usernameLabel.text = user?.username
         }
     }
     
     // MARK:- Screen properties
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
+    let profileImageView: CustomImageView = {
+        let iv = CustomImageView()
+        iv.contentMode = .scaleAspectFill
+        return iv
     }()
     
     let gridButton: UIButton = {
@@ -105,6 +106,7 @@ class UserProfileHeader: UICollectionViewCell {
         return button
     }()
     
+    // MARK:- Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -129,6 +131,10 @@ class UserProfileHeader: UICollectionViewCell {
                                  trailing: followingLabel.trailingAnchor,
                                  padding: UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0),
                                  size: CGSize(width: 0, height: 34))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK:- Screen methods
@@ -189,14 +195,10 @@ class UserProfileHeader: UICollectionViewCell {
 
     }
     
-    fileprivate func fetchProfileImage() {
-        profileImageView.layer.cornerRadius =  profileImageView.frame.width / 2
-        profileImageView.clipsToBounds = true
-        guard let profileImageUrl = user?.profileImageUrl else { return }
-        profileImageView.loadImageUsingCache(with: profileImageUrl)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    fileprivate func fetchProfileImage() {
+//        profileImageView.layer.cornerRadius =  profileImageView.frame.width / 2
+//        profileImageView.clipsToBounds = true
+//        guard let profileImageUrl = user?.profileImageUrl else { return }
+//        profileImageView.loadImageUsingCache(with: profileImageUrl)
+//    }
 }

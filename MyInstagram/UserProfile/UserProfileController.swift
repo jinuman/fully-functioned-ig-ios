@@ -30,7 +30,7 @@ class UserProfileController: UICollectionViewController {
         fetchUserAndSetupTitle()
         setupLogOutButton()
         
-        fetchPosts()
+        fetchOrderedPosts()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -38,24 +38,17 @@ class UserProfileController: UICollectionViewController {
     }
     
     // Handling methods
-    fileprivate func fetchPosts() {
+    fileprivate func fetchOrderedPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let ref = Database.database().reference().child("posts").child(uid)
-        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
-            
+        ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { [weak self] (snapshot) in
             guard
                 let self = self,
-                let dictionaries = snapshot.value as? [String : Any] else { return }
+                let dictionary = snapshot.value as? [String : Any],
+                let post = Post(dictionary: dictionary) else { return }
             
-            dictionaries.forEach({ (key, value) in
-                guard
-                    let dictionary = value as? [String : Any],
-                    let post = Post(dictionary: dictionary) else { return }
-                
-                self.posts.append(post)
-            })
-            
+            self.posts.append(post)
             self.collectionView.reloadData()
             
         }) { (error) in

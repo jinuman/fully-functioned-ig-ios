@@ -11,16 +11,18 @@ import UIKit
 class UserProfilePhotoCell: UICollectionViewCell {
     
     // MARK:- Cell properties
+    var cntNum: Int = 0
     var post: Post? {
         didSet {
+            cntNum += 1
+            print("post called \(cntNum)")
             guard let imageUrl = post?.imageUrl else { return }
-            self.photoImageView.loadImageUsingCache(with: imageUrl)
+            self.photoImageView.loadImage(with: imageUrl)
         }
     }
     
-    let photoImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.backgroundColor = .red
+    let photoImageView: CustomImageView = {
+        let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv
