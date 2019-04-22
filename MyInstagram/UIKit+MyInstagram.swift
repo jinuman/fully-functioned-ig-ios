@@ -28,9 +28,12 @@ extension UIImageView {
                 print(error.localizedDescription)
                 return
             }
-            guard let data = data else { return }
+            
+            guard
+                let data = data,
+                let downloadedImage = UIImage(data: data) else { return }
+            
             DispatchQueue.main.async {
-                guard let downloadedImage = UIImage(data: data) else { return }
                 imageCache.setObject(downloadedImage, forKey: imageUrlString as NSString)
                 self.image = downloadedImage
             }

@@ -14,6 +14,7 @@ class UserProfileController: UICollectionViewController {
     private let headerId = "headerId"
     private let cellId = "cellId"
     private var user: User?
+    private var posts = [Post]()
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {
@@ -23,18 +24,45 @@ class UserProfileController: UICollectionViewController {
         collectionView.register(UserProfileHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerId)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         navigationController?.navigationBar.prefersLargeTitles = false
         
         fetchUserAndSetupTitle()
         setupLogOutButton()
+        
+        fetchPosts()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    // Event methods
+    // Handling methods
+    fileprivate func fetchPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let ref = Database.database().reference().child("posts").child(uid)
+        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
+            
+            guard
+                let self = self,
+                let dictionaries = snapshot.value as? [String : Any] else { return }
+            
+            dictionaries.forEach({ (key, value) in
+                guard
+                    let dictionary = value as? [String : Any],
+                    let post = Post(dictionary: dictionary) else { return }
+                
+                self.posts.append(post)
+            })
+            
+            self.collectionView.reloadData()
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
     fileprivate func fetchUserAndSetupTitle() {
         guard let uid = Auth.auth().currentUser?.uid else {
             return
@@ -85,11 +113,9 @@ class UserProfileController: UICollectionViewController {
 // Regarding collectionView
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? UserProfileHeader else {
-            fatalError("UserProfileHeader is not proper!")
-        }
-        header.user = self.user
-        
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
+        let userProfileHeader = header as? UserProfileHeader
+        userProfileHeader?.user = self.user
         return header
     }
     
@@ -98,12 +124,13 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .green
+        let userProfilePhotoCell = cell as? UserProfilePhotoCell
+        userProfilePhotoCell?.post = posts[indexPath.item]
         return cell
     }
     
