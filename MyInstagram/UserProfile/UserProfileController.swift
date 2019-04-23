@@ -74,9 +74,8 @@ class UserProfileController: UICollectionViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOut))
     }
     
-    @objc func handleSignOut() {
-        let alertController = UIAlertController(title: nil,
-                                                message: nil,
+    @objc fileprivate func handleSignOut() {
+        let alertController = UIAlertController(title: "Do you want to sign out?", message: nil,
                                                 preferredStyle: .actionSheet)
         let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] (_) in
             do {
@@ -94,7 +93,8 @@ class UserProfileController: UICollectionViewController {
         
         alertController.addAction(signOutAction)
         alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
+        alertController.view.addSubview(UIView())  // actionSheet error disappears
+        present(alertController, animated: false, completion: nil)
     }
 }
 

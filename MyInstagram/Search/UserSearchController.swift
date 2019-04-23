@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class UserSearchController: UICollectionViewController {
     
@@ -36,6 +37,20 @@ class UserSearchController: UICollectionViewController {
         collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: cellId)
         
         collectionView.alwaysBounceVertical = true
+        
+        fetchUsers()
+    }
+    
+    fileprivate func fetchUsers() {
+        let ref = Database.database().reference().child("users")
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            print(snapshot.value)
+            guard let dictionaries = snapshot.value as? [String : Any] else { return }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
 }
 
