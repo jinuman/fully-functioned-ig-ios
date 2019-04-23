@@ -43,12 +43,14 @@ class UserProfileController: UICollectionViewController {
         
         let ref = Database.database().reference().child("posts").child(uid)
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { [weak self] (snapshot) in
+          
             guard
                 let self = self,
                 let dictionary = snapshot.value as? [String : Any],
-                let post = Post(dictionary: dictionary) else { return }
+                let user = self.user,
+                let post = Post(user: user, dictionary: dictionary) else { return }
             
-            self.posts.append(post)
+            self.posts.insert(post, at: 0) // insert latest post on the top
             self.collectionView.reloadData()
             
         }) { (error) in
@@ -140,20 +142,5 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (view.frame.width - 2) / 3
         return CGSize(width: width, height: width)
-    }
-}
-
-struct User {
-    let username: String
-    let profileImageUrl: String
-    
-    init(dictionary: [String: Any]) {
-        guard
-            let username = dictionary["username"] as? String,
-            let profileImageUrl = dictionary["profileImageUrl"] as? String else {
-                fatalError("User dictionary is not valid")
-        }
-        self.username = username
-        self.profileImageUrl = profileImageUrl
     }
 }

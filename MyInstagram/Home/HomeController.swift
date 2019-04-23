@@ -39,26 +39,37 @@ class HomeController: UICollectionViewController {
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let ref = Database.database().reference().child("posts").child(uid)
-        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
+        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             
-            guard
-                let self = self,
-                let dictionaries = snapshot.value as? [String : Any] else { return }
+            guard let userDictionary = snapshot.value as? [String : Any] else { return }
+            let user = User(dictionary: userDictionary)
             
-            dictionaries.forEach({ (key, value) in
-                guard
-                    let dictionary = value as? [String : Any],
-                    let post = Post(dictionary: dictionary) else { return }
+            let ref = Database.database().reference().child("posts").child(uid)
+            ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
                 
-                self.posts.append(post)
-            })
-            
-            self.collectionView.reloadData()
+                guard
+                    let self = self,
+                    let dictionaries = snapshot.value as? [String : Any] else { return }
+                
+                dictionaries.forEach({ (key, value) in
+                    guard
+                        let dictionary = value as? [String : Any],
+                        let post = Post(user: user, dictionary: dictionary) else { return }
+                    
+                    self.posts.append(post)
+                })
+                
+                self.collectionView.reloadData()
+                
+            }) { (error) in
+                print(error.localizedDescription)
+            }
             
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        
     }
 }
 
@@ -76,7 +87,11 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.safeAreaLayoutGuide.layoutFrame.width
-        return CGSize(width: width, height: 200)
+        let width: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
+        var height: CGFloat = 40 + 8 + 8 // userProfileImageView + padding
+        height += width
+        height += 50  // several buttons field
+        height += 60 // caption field
+        return CGSize(width: width, height: height)
     }
 }

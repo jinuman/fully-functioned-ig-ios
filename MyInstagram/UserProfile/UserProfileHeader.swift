@@ -12,8 +12,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     var user: User? {
         didSet {
-            guard let imageUrl = user?.profileImageUrl else { return }
-            profileImageView.loadImage(with: imageUrl)
+            fetchProfileImage()
             usernameLabel.text = user?.username
         }
     }
@@ -195,10 +194,10 @@ class UserProfileHeader: UICollectionViewCell {
 
     }
     
-//    fileprivate func fetchProfileImage() {
-//        profileImageView.layer.cornerRadius =  profileImageView.frame.width / 2
-//        profileImageView.clipsToBounds = true
-//        guard let profileImageUrl = user?.profileImageUrl else { return }
-//        profileImageView.loadImageUsingCache(with: profileImageUrl)
-//    }
+    fileprivate func fetchProfileImage() {
+        profileImageView.layer.cornerRadius =  profileImageView.frame.width / 2
+        profileImageView.clipsToBounds = true
+        guard let profileImageUrl = user?.profileImageUrl else { return }
+        profileImageView.loadImage(with: profileImageUrl)
+    }
 }
