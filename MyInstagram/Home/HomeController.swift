@@ -30,6 +30,10 @@ class HomeController: UICollectionViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
+    deinit {
+        print("HomeController \(#function)")
+    }
+    
     // MARK:- Screen methods
     fileprivate func setupNavigationItems() {
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo2"))
@@ -39,37 +43,34 @@ class HomeController: UICollectionViewController {
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+        Database.fetchUser(with: uid) { [weak self] (user) in
+            guard let self = self else { return }
+            self.fetchPosts(with: user)
+        }
+        
+    }
+    
+    fileprivate func fetchPosts(with user: User) {
+        let ref = Database.database().reference().child("posts").child(user.uid)
+        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
             
-            guard let userDictionary = snapshot.value as? [String : Any] else { return }
-            let user = User(dictionary: userDictionary)
+            guard
+                let self = self,
+                let dictionaries = snapshot.value as? [String : Any] else { return }
             
-            let ref = Database.database().reference().child("posts").child(uid)
-            ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
-                
+            dictionaries.forEach({ (key, value) in
                 guard
-                    let self = self,
-                    let dictionaries = snapshot.value as? [String : Any] else { return }
+                    let dictionary = value as? [String : Any],
+                    let post = Post(user: user, dictionary: dictionary) else { return }
                 
-                dictionaries.forEach({ (key, value) in
-                    guard
-                        let dictionary = value as? [String : Any],
-                        let post = Post(user: user, dictionary: dictionary) else { return }
-                    
-                    self.posts.append(post)
-                })
-                
-                self.collectionView.reloadData()
-                
-            }) { (error) in
-                print(error.localizedDescription)
-            }
+                self.posts.append(post)
+            })
+            
+            self.collectionView.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
         }
-        
-        
     }
 }
 

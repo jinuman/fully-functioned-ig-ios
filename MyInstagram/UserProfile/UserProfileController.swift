@@ -27,7 +27,7 @@ class UserProfileController: UICollectionViewController {
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         navigationController?.navigationBar.prefersLargeTitles = false
         
-        fetchUserAndSetupTitle()
+        fetchUser()
         setupLogOutButton()
         
         fetchOrderedPosts()
@@ -58,22 +58,15 @@ class UserProfileController: UICollectionViewController {
         }
     }
     
-    fileprivate func fetchUserAndSetupTitle() {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
-            guard
-                let self = self,
-                let dictionary = snapshot.value as? [String: Any] else {
-                    return
-            }
-            self.user = User(dictionary: dictionary)
+    fileprivate func fetchUser() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Database.fetchUser(with: uid) { [weak self] (user) in
+            guard let self = self else { return }
+            
+            self.user = user
             self.navigationItem.title = self.user?.username
-            print("\nSuccessfully fetch user name: \(self.user!.username)")
             self.collectionView.reloadData()
-        }) { (err) in
-            print("Failed to fetch user: \(err.localizedDescription)")
         }
     }
     
