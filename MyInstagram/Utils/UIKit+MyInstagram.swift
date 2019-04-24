@@ -16,6 +16,8 @@ extension UIColor {
     static var loginColor: UIColor {
         return .init(r: 149, g: 204, b: 244)
     }
+    
+    static let skyblue = UIColor(r: 17, g: 154, b: 237)
 }
 
 extension UIView {
