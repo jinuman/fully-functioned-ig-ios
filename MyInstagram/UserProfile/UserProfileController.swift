@@ -42,6 +42,8 @@ class UserProfileController: UICollectionViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let ref = Database.database().reference().child("posts").child(uid)
+        
+        #warning("issue 1: self = nil 문제 발생")
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { [weak self] (snapshot) in
           
             guard
@@ -52,7 +54,6 @@ class UserProfileController: UICollectionViewController {
             
             self.posts.insert(post, at: 0) // insert latest post on the top
             self.collectionView.reloadData()
-            
         }) { (error) in
             print(error.localizedDescription)
         }

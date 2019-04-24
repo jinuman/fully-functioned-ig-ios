@@ -93,6 +93,7 @@ class SharePhotoController: UIViewController {
         let filename = UUID().uuidString
         let storageRef = Storage.storage().reference().child("posts").child(filename)
         storageRef.putData(uploadData, metadata: nil) { [weak self] (metadata, error) in
+            
             guard let self = self else { return }
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
@@ -118,6 +119,7 @@ class SharePhotoController: UIViewController {
             let caption = captionTextView.text else { return }
         
         // 사용자가 작성한 게시물 정보 저장
+        #warning("issue 1: 여기서 UserProfileController fetchOrder.. childAdded 발생")
         let userPostRef = Database.database().reference().child("posts").child(uid).childByAutoId()
         
         let values = [
