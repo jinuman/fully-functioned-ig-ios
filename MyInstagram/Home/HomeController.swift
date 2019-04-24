@@ -24,6 +24,7 @@ class HomeController: UICollectionViewController {
         setupNavigationItems()
         
         fetchPosts()
+        fetchFollowingUserIds()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -65,11 +66,31 @@ class HomeController: UICollectionViewController {
                 
                 self.posts.append(post)
             })
-            
+            self.posts.sort(by: { (p0, p1) -> Bool in
+                return p0.creationDate.compare(p1.creationDate) == .orderedDescending
+            })
             self.collectionView.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
+        }
+    }
+    
+    fileprivate func fetchFollowingUserIds() {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        Database.database().reference().child("following").child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            guard let userIdsDictionary = snapshot.value as? [String : Any] else { return }
+            userIdsDictionary.forEach({ (key, value) in
+                let uid = key
+                Database.fetchUser(with: uid, completion: { [weak self] (user) in
+                    guard let self = self else { return }
+                    self.fetchPosts(with: user)
+                })
+            })
+            
+        }) { (err) in
+            print("Failed to fetch following user ids: ", err.localizedDescription)
         }
     }
 }
