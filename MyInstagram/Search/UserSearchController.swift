@@ -39,8 +39,18 @@ class UserSearchController: UICollectionViewController {
         collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: cellId)
         
         collectionView.alwaysBounceVertical = true
+        collectionView.keyboardDismissMode = .onDrag
         
         fetchUsers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar.isHidden = false
+    }
+    
+    deinit {
+        print("UserSearchController \(#function)")
     }
     
     fileprivate func fetchUsers() {
@@ -62,8 +72,8 @@ class UserSearchController: UICollectionViewController {
                 self.users.append(user)
             })
             
-            self.users.sort(by: { (user1, user2) -> Bool in
-                return user1.username.compare(user2.username) == .orderedAscending
+            self.users.sort(by: { (u0, u1) -> Bool in
+                return u0.username.lowercased().compare(u1.username.lowercased()) == .orderedAscending
             })
             
             self.filteredUsers = self.users
@@ -92,6 +102,17 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.safeAreaLayoutGuide.layoutFrame.width
         return CGSize(width: width, height: 66) // image width + padding * 2
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        searchBar.isHidden = true
+        searchBar.resignFirstResponder()
+        
+        let user = filteredUsers[indexPath.item]
+        
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(userProfileController, animated: true)
     }
 }
 
