@@ -119,7 +119,6 @@ class SharePhotoController: UIViewController {
             let caption = captionTextView.text else { return }
         
         // 사용자가 작성한 게시물 정보 저장
-        #warning("issue 1: 여기서 UserProfileController fetchOrder.. childAdded 발생")
         let userPostRef = Database.database().reference().child("posts").child(uid).childByAutoId()
         
         let values = [

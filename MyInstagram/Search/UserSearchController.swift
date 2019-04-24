@@ -112,6 +112,7 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout {
         let user = filteredUsers[indexPath.item]
         
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfileController.userId = user.uid
         navigationController?.pushViewController(userProfileController, animated: true)
     }
 }

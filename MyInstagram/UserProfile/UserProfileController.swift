@@ -16,6 +16,8 @@ class UserProfileController: UICollectionViewController {
     private var user: User?
     private var posts = [Post]()
     
+    var userId: String?
+    
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +29,9 @@ class UserProfileController: UICollectionViewController {
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         navigationController?.navigationBar.prefersLargeTitles = false
         
-        fetchUser()
         setupLogOutButton()
         
-        fetchOrderedPosts()
+        fetchUser()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -38,12 +39,25 @@ class UserProfileController: UICollectionViewController {
     }
     
     // Handling methods
+    fileprivate func fetchUser() {
+        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
+        
+        Database.fetchUser(with: uid) { [weak self] (user) in
+            guard let self = self else { return }
+            
+            self.user = user
+            self.navigationItem.title = self.user?.username
+            self.collectionView.reloadData()
+            
+            self.fetchOrderedPosts()
+        }
+    }
+    
     fileprivate func fetchOrderedPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = user?.uid else { return }
         
         let ref = Database.database().reference().child("posts").child(uid)
         
-        #warning("issue 1: self = nil 문제 발생")
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { [weak self] (snapshot) in
           
             guard
@@ -56,18 +70,6 @@ class UserProfileController: UICollectionViewController {
             self.collectionView.reloadData()
         }) { (error) in
             print(error.localizedDescription)
-        }
-    }
-    
-    fileprivate func fetchUser() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        Database.fetchUser(with: uid) { [weak self] (user) in
-            guard let self = self else { return }
-            
-            self.user = user
-            self.navigationItem.title = self.user?.username
-            self.collectionView.reloadData()
         }
     }
     
