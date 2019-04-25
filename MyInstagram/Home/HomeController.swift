@@ -21,10 +21,13 @@ class HomeController: UICollectionViewController {
         
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
         setupNavigationItems()
         
-        fetchPosts()
-        fetchFollowingUserIds()
+        fetchAllPosts()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -41,38 +44,21 @@ class HomeController: UICollectionViewController {
     }
     
     // MARK:- Handling methods
+    fileprivate func fetchAllPosts() {
+        fetchPosts()
+        fetchFollowingUserIds()
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        fetchAllPosts()
+    }
+    
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         Database.fetchUser(with: uid) { [weak self] (user) in
             guard let self = self else { return }
             self.fetchPosts(with: user)
-        }
-        
-    }
-    
-    fileprivate func fetchPosts(with user: User) {
-        let ref = Database.database().reference().child("posts").child(user.uid)
-        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
-            
-            guard
-                let self = self,
-                let dictionaries = snapshot.value as? [String : Any] else { return }
-            
-            dictionaries.forEach({ (key, value) in
-                guard
-                    let dictionary = value as? [String : Any],
-                    let post = Post(user: user, dictionary: dictionary) else { return }
-                
-                self.posts.append(post)
-            })
-            self.posts.sort(by: { (p0, p1) -> Bool in
-                return p0.creationDate.compare(p1.creationDate) == .orderedDescending
-            })
-            self.collectionView.reloadData()
-            
-        }) { (error) in
-            print(error.localizedDescription)
         }
     }
     
@@ -91,6 +77,33 @@ class HomeController: UICollectionViewController {
             
         }) { (err) in
             print("Failed to fetch following user ids: ", err.localizedDescription)
+        }
+    }
+    
+    fileprivate func fetchPosts(with user: User) {
+        let ref = Database.database().reference().child("posts").child(user.uid)
+        ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
+            
+            guard
+                let self = self,
+                let dictionaries = snapshot.value as? [String : Any] else { return }
+            
+            self.collectionView.refreshControl?.endRefreshing()
+            
+            dictionaries.forEach({ (key, value) in
+                guard
+                    let dictionary = value as? [String : Any],
+                    let post = Post(user: user, dictionary: dictionary) else { return }
+                
+                self.posts.append(post)
+            })
+            self.posts.sort(by: { (p0, p1) -> Bool in
+                return p0.creationDate.compare(p1.creationDate) == .orderedDescending
+            })
+            self.collectionView.reloadData()
+            
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
 }
