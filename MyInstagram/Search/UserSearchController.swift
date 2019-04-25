@@ -91,10 +91,10 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        let userSearchCell = cell as? UserSearchCell
-        
-        userSearchCell?.user = filteredUsers[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? UserSearchCell else {
+            fatalError("Failed cast to UserSearchCell")
+        }
+        cell.user = filteredUsers[indexPath.item]
         
         return cell
     }

@@ -122,7 +122,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoSelectorCell else {
-            fatalError("Photo Selector Cell is bad")
+            fatalError("Failed to cast PhotoSelectorCell")
         }
         
         cell.photoImageView.image = images[indexPath.item]
@@ -158,7 +158,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     // Collection View header
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else {
-            fatalError("Photo Selector Header is bad")
+            fatalError("Failed to cast PhotoSelectorHeader")
         }
         
         self.header = header

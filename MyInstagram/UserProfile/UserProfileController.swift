@@ -104,9 +104,9 @@ class UserProfileController: UICollectionViewController {
 // Regarding collectionView
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        let userProfileHeader = header as? UserProfileHeader
-        userProfileHeader?.user = self.user
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? UserProfileHeader else { fatalError("Failed to cast UserProfileHeader") }
+        
+        header.user = self.user
         return header
     }
     
@@ -119,9 +119,10 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        let userProfilePhotoCell = cell as? UserProfilePhotoCell
-        userProfilePhotoCell?.post = posts[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? UserProfilePhotoCell else {
+            fatalError("Failed to cast UserProfilePhotoCell")
+        }
+        cell.post = posts[indexPath.item]
         return cell
     }
     

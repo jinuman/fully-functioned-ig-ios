@@ -124,9 +124,10 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        let homePostCell = cell as? HomePostCell
-        homePostCell?.post = posts[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else {
+            fatalError("Failed to cast HomePostCell")
+        }
+        cell.post = posts[indexPath.item]
         return cell
     }
     
