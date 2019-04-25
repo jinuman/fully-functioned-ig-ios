@@ -11,6 +11,10 @@ import Firebase
 
 class SharePhotoController: UIViewController {
     
+    // MARK:- Properties
+    static let updateFeedNotificationName = Notification.Name("UpdateFeed")
+    
+    // MARK:- Screen properties
     let postImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -138,6 +142,9 @@ class SharePhotoController: UIViewController {
             }
             print("Successfully saved post to DB")
             self.dismiss(animated: true, completion: nil)
+            
+//            let name = Notification.Name("UpdateFeed")
+            NotificationCenter.default.post(name: SharePhotoController.updateFeedNotificationName, object: nil)
         }
     }
 }

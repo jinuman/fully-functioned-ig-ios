@@ -11,12 +11,16 @@ import Firebase
 
 class HomeController: UICollectionViewController {
     
-    let cellId = "cellId"
+    private let cellId = "cellId"
     var posts = [Post]()
     
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed),
+                                               name: SharePhotoController.updateFeedNotificationName, object: nil)
+        
         collectionView.backgroundColor = .white
         
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
@@ -44,13 +48,18 @@ class HomeController: UICollectionViewController {
     }
     
     // MARK:- Handling methods
-    fileprivate func fetchAllPosts() {
-        fetchPosts()
-        fetchFollowingUserIds()
+    @objc fileprivate func handleUpdateFeed() {
+        handleRefresh()
     }
     
     @objc fileprivate func handleRefresh() {
+        posts.removeAll()
         fetchAllPosts()
+    }
+    
+    fileprivate func fetchAllPosts() {
+        fetchPosts()
+        fetchFollowingUserIds()
     }
     
     fileprivate func fetchPosts() {
