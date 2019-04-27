@@ -30,6 +30,7 @@
 		36C511FD222C1F2E0071AE8C /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C511FC222C1F2E0071AE8C /* UserProfileController.swift */; };
 		36C51200222CF16D0071AE8C /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C511FF222CF16D0071AE8C /* UserProfileHeader.swift */; };
 		36C51203222D3A1D0071AE8C /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C51202222D3A1D0071AE8C /* SignInController.swift */; };
+		36D026D32272EF56005C4960 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D026D22272EF56005C4960 /* CameraController.swift */; };
 		36FCDACB226DBE5D00B05CD6 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACA226DBE5D00B05CD6 /* CustomImageView.swift */; };
 		36FCDACE226DEC1E00B05CD6 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACD226DEC1E00B05CD6 /* HomeController.swift */; };
 		36FCDAD0226DED5000B05CD6 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACF226DED5000B05CD6 /* HomePostCell.swift */; };
@@ -75,6 +76,7 @@
 		36C511FC222C1F2E0071AE8C /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		36C511FF222CF16D0071AE8C /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		36C51202222D3A1D0071AE8C /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
+		36D026D22272EF56005C4960 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		36FCDACA226DBE5D00B05CD6 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		36FCDACD226DEC1E00B05CD6 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		36FCDACF226DED5000B05CD6 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				36FCDAC9226DBE4000B05CD6 /* Utils */,
 				360A2062226D7CE400FC4088 /* Models */,
 				36FCDACC226DEC0300B05CD6 /* Home */,
+				36D026D12272EF3B005C4960 /* Camera */,
 				36296E7B226EF8E100B21015 /* Search */,
 				36ABE0442237BEFE008EAFC5 /* AddPhoto */,
 				36C51201222D3A090071AE8C /* Login */,
@@ -218,6 +221,14 @@
 				3670D29D222B7C98002FDAF9 /* SignUpController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		36D026D12272EF3B005C4960 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				36D026D22272EF56005C4960 /* CameraController.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		36FCDAC9226DBE4000B05CD6 /* Utils */ = {
@@ -436,6 +447,7 @@
 				3654D15A223F8D5E00933705 /* PhotoSelectorCell.swift in Sources */,
 				36FCDACB226DBE5D00B05CD6 /* CustomImageView.swift in Sources */,
 				360A2064226D7CF600FC4088 /* Post.swift in Sources */,
+				36D026D32272EF56005C4960 /* CameraController.swift in Sources */,
 				36544594222B9609006FF627 /* UIKit+MyInstagram.swift in Sources */,
 				36296E7D226EF90000B21015 /* UserSearchController.swift in Sources */,
 				360A2066226D80F500FC4088 /* UserProfilePhotoCell.swift in Sources */,
