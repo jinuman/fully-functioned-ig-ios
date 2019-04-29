@@ -153,6 +153,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
 // MARK:- Regarding HomePostCellDelegate
 extension HomeController: HomePostCellDelegate {
     func didTapComment(post: Post) {
-        print(post.caption)
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(commentsController, animated: true)
     }
 }
