@@ -27,6 +27,10 @@ class CameraController: UIViewController {
         return button
     }()
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,10 +120,16 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         
         let previewImage = UIImage(data: imageData)
         
-        let previewImageView = UIImageView(image: previewImage)
+        let containerView = PreviewPhotoContainerView()
+        containerView.previewImageView.image = previewImage
+        view.addSubview(containerView)
+        
+        containerView.fillSuperview()
+        
+        /*let previewImageView = UIImageView(image: previewImage)
         view.addSubview(previewImageView)
         previewImageView.fillSuperview()
         
-        print("Finish Processing Photo sample buffer")
+        print("Finish Processing Photo sample buffer")*/
     }
 }
