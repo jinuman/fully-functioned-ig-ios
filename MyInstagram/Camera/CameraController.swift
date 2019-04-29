@@ -11,6 +11,8 @@ import AVFoundation
 
 class CameraController: UIViewController {
     
+    let output = AVCapturePhotoOutput()
+    
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "right_arrow_shadow").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -66,7 +68,11 @@ class CameraController: UIViewController {
     }
     
     @objc fileprivate func handleCapturePhoto() {
+        let settings = AVCapturePhotoSettings()
         
+        settings.previewPhotoFormat = settings.embeddedThumbnailPhotoFormat
+        
+        output.capturePhoto(with: settings, delegate: self)
     }
     
     fileprivate func setupCaptureSession() {
@@ -85,7 +91,6 @@ class CameraController: UIViewController {
         }
         
         // 2. setup outputs
-        let output = AVCapturePhotoOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
         }
@@ -96,5 +101,25 @@ class CameraController: UIViewController {
         view.layer.addSublayer(previewLayer)
         
         captureSession.startRunning()
+    }
+}
+
+extension CameraController: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
+        if let error = error {
+            print("Falied to capture photo: \(error.localizedDescription)")
+            return
+        }
+        
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        
+        let previewImage = UIImage(data: imageData)
+        
+        let previewImageView = UIImageView(image: previewImage)
+        view.addSubview(previewImageView)
+        previewImageView.fillSuperview()
+        
+        print("Finish Processing Photo sample buffer")
     }
 }
