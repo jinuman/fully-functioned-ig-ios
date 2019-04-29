@@ -136,6 +136,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
             fatalError("Failed to cast HomePostCell")
         }
         cell.post = posts[indexPath.item]
+        cell.delegate = self
         return cell
     }
     
@@ -146,5 +147,12 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         height += 50  // several buttons field
         height += 60 // caption field
         return CGSize(width: width, height: height)
+    }
+}
+
+// MARK:- Regarding HomePostCellDelegate
+extension HomeController: HomePostCellDelegate {
+    func didTapComment(post: Post) {
+        print(post.caption)
     }
 }
