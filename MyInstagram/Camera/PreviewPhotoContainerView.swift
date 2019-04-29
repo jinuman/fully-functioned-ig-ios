@@ -14,6 +14,7 @@ class PreviewPhotoContainerView: UIView {
     // MARK:- Screen properties
     let previewImageView: UIImageView = {
         let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
     

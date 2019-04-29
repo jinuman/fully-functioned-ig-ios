@@ -74,9 +74,14 @@ class CameraController: UIViewController {
     @objc fileprivate func handleCapturePhoto() {
         let settings = AVCapturePhotoSettings()
         
-        settings.previewPhotoFormat = settings.embeddedThumbnailPhotoFormat
+        // do not execute camera capture for simulator
+        #if (!arch(x86_64))
+        guard let previewFormatType = settings.availablePreviewPhotoPixelFormatTypes.first else { return }
+        
+        settings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewFormatType]
         
         output.capturePhoto(with: settings, delegate: self)
+        #endif
     }
     
     fileprivate func setupCaptureSession() {
