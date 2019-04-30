@@ -10,6 +10,7 @@
 		0A5C3AF8536057B2D5BB2140 /* Pods_MyInstagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34ECC0D27B8AB04FE60509E3 /* Pods_MyInstagram.framework */; };
 		360A2064226D7CF600FC4088 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 360A2063226D7CF600FC4088 /* Post.swift */; };
 		360A2066226D80F500FC4088 /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 360A2065226D80F500FC4088 /* UserProfilePhotoCell.swift */; };
+		3617DC47227801FF00506AF8 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3617DC46227801FF00506AF8 /* CommentCell.swift */; };
 		36296E78226EEA6700B21015 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36296E77226EEA6700B21015 /* User.swift */; };
 		36296E7A226EF5B300B21015 /* Firebase+MyInstagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36296E79226EF5B300B21015 /* Firebase+MyInstagram.swift */; };
 		36296E7D226EF90000B21015 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36296E7C226EF90000B21015 /* UserSearchController.swift */; };
@@ -56,6 +57,7 @@
 		34ECC0D27B8AB04FE60509E3 /* Pods_MyInstagram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyInstagram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		360A2063226D7CF600FC4088 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		360A2065226D80F500FC4088 /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotoCell.swift; sourceTree = "<group>"; };
+		3617DC46227801FF00506AF8 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		36296E77226EEA6700B21015 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		36296E79226EF5B300B21015 /* Firebase+MyInstagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase+MyInstagram.swift"; sourceTree = "<group>"; };
 		36296E7C226EF90000B21015 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 				36FCDACD226DEC1E00B05CD6 /* HomeController.swift */,
 				36FCDACF226DED5000B05CD6 /* HomePostCell.swift */,
 				3640970122771D00006561C9 /* CommentsController.swift */,
+				3617DC46227801FF00506AF8 /* CommentCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				36296E7D226EF90000B21015 /* UserSearchController.swift in Sources */,
 				360A2066226D80F500FC4088 /* UserProfilePhotoCell.swift in Sources */,
 				36296E78226EEA6700B21015 /* User.swift in Sources */,
+				3617DC47227801FF00506AF8 /* CommentCell.swift in Sources */,
 				36C511FB222C1DDE0071AE8C /* MainTabBarController.swift in Sources */,
 				36C511FD222C1F2E0071AE8C /* UserProfileController.swift in Sources */,
 				36ABE0462237BF16008EAFC5 /* PhotoSelectorController.swift in Sources */,
