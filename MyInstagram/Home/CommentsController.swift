@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import Firebase
 
 class CommentsController: UICollectionViewController {
+    
+    var post: Post?
     
     private lazy var inputContainerView: UIView = {
         let containerView = UIView()
@@ -79,6 +82,26 @@ class CommentsController: UICollectionViewController {
     }
     
     @objc fileprivate func handleSend() {
+        guard
+            let uid = Auth.auth().currentUser?.uid,
+            let postId = post?.id,
+            let comment = commentTextField.text else { return }
         
+        let values = [
+            "uid" : uid,
+            "creationDate" : Date().timeIntervalSince1970,
+            "text" : comment
+        ] as [String : Any]
+        
+        Database.database().reference().child("comments").child(postId).childByAutoId().updateChildValues(values) { [weak self] (err, ref) in
+            guard let self = self else { return }
+            
+            if let err = err {
+                print("Failed to insert comment:", err.localizedDescription)
+                return
+            }
+            
+            print("Successfully inserted comment.")
+        }
     }
 }

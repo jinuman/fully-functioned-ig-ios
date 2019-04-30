@@ -110,8 +110,9 @@ class HomeController: UICollectionViewController {
             dictionaries.forEach({ (key, value) in
                 guard
                     let dictionary = value as? [String : Any],
-                    let post = Post(user: user, dictionary: dictionary) else { return }
+                    var post = Post(user: user, dictionary: dictionary) else { return }
                 
+                post.id = key
                 self.posts.append(post)
             })
             self.posts.sort(by: { (p0, p1) -> Bool in
@@ -154,6 +155,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
 extension HomeController: HomePostCellDelegate {
     func didTapComment(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
     }
 }
