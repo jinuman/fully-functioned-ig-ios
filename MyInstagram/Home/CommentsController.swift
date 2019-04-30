@@ -9,9 +9,21 @@
 import UIKit
 
 class CommentsController: UICollectionViewController {
+    
+    // MARK:- Life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.backgroundColor = .red
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
 }
