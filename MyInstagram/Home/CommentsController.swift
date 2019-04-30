@@ -21,20 +21,17 @@ class CommentsController: UICollectionViewController {
         sendButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         
-        let textField = UITextField()
-        textField.placeholder = "Enter comment.."
-        
-        [textField, sendButton].forEach {
+        [self.commentTextField, sendButton].forEach {
             containerView.addSubview($0)
         }
         
-        textField.anchor(top: nil,
-                         leading: containerView.leadingAnchor,
-                         bottom: nil,
-                         trailing: sendButton.leadingAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0))
-        textField.centerYInSuperview()
-        textField.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+        self.commentTextField.anchor(top: nil,
+                                     leading: containerView.leadingAnchor,
+                                     bottom: nil,
+                                     trailing: sendButton.leadingAnchor,
+                                     padding: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0))
+        self.commentTextField.centerYInSuperview()
+        self.commentTextField.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         
         sendButton.anchor(top: nil,
                           leading: nil,
@@ -45,6 +42,12 @@ class CommentsController: UICollectionViewController {
         sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         
         return containerView
+    }()
+    
+    private let commentTextField: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Enter comments.."
+        return tf
     }()
     
     override var inputAccessoryView: UIView? {
