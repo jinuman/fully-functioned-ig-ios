@@ -13,8 +13,12 @@ class UserProfileController: UICollectionViewController {
     
     private let headerId = "headerId"
     private let cellId = "cellId"
+    private let homePostCellId = "homePostCellId"
+    
     private var user: User?
     private var posts = [Post]()
+    
+    private var isGridView = true
     
     var userId: String?
     
@@ -26,7 +30,12 @@ class UserProfileController: UICollectionViewController {
         collectionView.register(UserProfileHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerId)
+        
+        
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
+        
+        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: homePostCellId)
+        
         navigationController?.navigationBar.prefersLargeTitles = false
         
         setupLogOutButton()
@@ -107,6 +116,8 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? UserProfileHeader else { fatalError("Failed to cast UserProfileHeader") }
         
         header.user = self.user
+        header.delegate = self
+        
         return header
     }
     
@@ -119,11 +130,21 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? UserProfilePhotoCell else {
-            fatalError("Failed to cast UserProfilePhotoCell")
+        
+        if isGridView {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? UserProfilePhotoCell else {
+                fatalError("Failed to cast UserProfilePhotoCell")
+            }
+            cell.post = posts[indexPath.item]
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? HomePostCell else {
+                fatalError("Failed to cast HomePostCell inside UserProfileController")
+            }
+            cell.post = posts[indexPath.item]
+            return cell
         }
-        cell.post = posts[indexPath.item]
-        return cell
+       
     }
     
     // 행들 간 간격 return
@@ -137,7 +158,30 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 2) / 3
-        return CGSize(width: width, height: width)
+        
+        if isGridView {
+            let width = (view.frame.width - 2) / 3
+            return CGSize(width: width, height: width)
+        } else {
+            
+            let width: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
+            var height: CGFloat = 40 + 8 + 8 // userProfileImageView + padding
+            height += width
+            height += 50  // several buttons field
+            height += 60  // caption field
+            return CGSize(width: width, height: height)
+        }
+    }
+}
+
+extension UserProfileController: UserProfileHeaderDelegate {
+    func didChangeToListView() {
+        isGridView = false
+        collectionView.reloadData()
+    }
+    
+    func didChangeToGridView() {
+        isGridView = true
+        collectionView.reloadData()
     }
 }

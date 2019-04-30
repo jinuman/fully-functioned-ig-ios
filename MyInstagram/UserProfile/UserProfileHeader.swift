@@ -9,7 +9,14 @@
 import UIKit
 import Firebase
 
+protocol UserProfileHeaderDelegate: class {
+    func didChangeToListView()
+    func didChangeToGridView()
+}
+
 class UserProfileHeader: UICollectionViewCell {
+    
+    weak var delegate: UserProfileHeaderDelegate?
     
     var user: User? {
         didSet {
@@ -27,23 +34,25 @@ class UserProfileHeader: UICollectionViewCell {
         return iv
     }()
     
-    let gridButton: UIButton = {
+    private lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
     
-    let listButton: UIButton = {
+    private lazy var listButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
-        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.tintColor = .disabledButtonColor
+        button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
     }()
     
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
-        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.tintColor = .disabledButtonColor
         return button
     }()
     
@@ -266,8 +275,20 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func setupFollowStyle() {
         self.editProfileFollowButton.setTitle("Follow", for: .normal)
-        self.editProfileFollowButton.backgroundColor = .skyblue
+        self.editProfileFollowButton.backgroundColor = .enabledButtonColor
         self.editProfileFollowButton.setTitleColor(.white, for: .normal)
         self.editProfileFollowButton.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
+    }
+    
+    @objc fileprivate func handleChangeToListView() {
+        listButton.tintColor = .enabledButtonColor
+        gridButton.tintColor = .disabledButtonColor
+        delegate?.didChangeToListView()
+    }
+    
+    @objc fileprivate func handleChangeToGridView() {
+        listButton.tintColor = .disabledButtonColor
+        gridButton.tintColor = .enabledButtonColor
+        delegate?.didChangeToGridView()
     }
 }

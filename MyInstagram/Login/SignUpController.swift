@@ -136,7 +136,7 @@ class SignUpController: UIViewController {
                 return
         }
         signUpButton.isEnabled = true
-        signUpButton.backgroundColor = .skyblue
+        signUpButton.backgroundColor = .enabledButtonColor
     }
     
     @objc fileprivate func handlePlusPhoto() {

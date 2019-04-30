@@ -17,7 +17,9 @@ extension UIColor {
         return .init(r: 149, g: 204, b: 244)
     }
     
-    static let skyblue = UIColor(r: 17, g: 154, b: 237)
+    static let enabledButtonColor = UIColor(r: 17, g: 154, b: 237)
+    
+    static let disabledButtonColor = UIColor(white: 0, alpha: 0.2)
 }
 
 extension UIView {
