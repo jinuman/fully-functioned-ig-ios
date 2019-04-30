@@ -13,6 +13,7 @@ class CommentsController: UICollectionViewController {
     
     var post: Post?
     private let cellId = "cellId"
+    var comments = [Comment]()
     
     private lazy var inputContainerView: UIView = {
         let containerView = UIView()
@@ -116,9 +117,15 @@ class CommentsController: UICollectionViewController {
     fileprivate func fetchComments() {
         guard let postId = self.post?.id else { return }
         let ref = Database.database().reference().child("comments").child(postId)
-        ref.observe(.childAdded, with: { (snapshot) in
+        ref.observe(.childAdded, with: { [weak self] (snapshot) in
             
+            guard
+                let self = self,
+                let dictionary = snapshot.value as? [String : Any],
+                let comment = Comment(dictionary: dictionary) else { return }
             
+            self.comments.append(comment)
+            self.collectionView.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
@@ -128,14 +135,14 @@ class CommentsController: UICollectionViewController {
 
 extension CommentsController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+        return comments.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? CommentCell else {
             fatalError("Failed to cast CommentCell")
         }
-        
+        cell.comment = comments[indexPath.item]
         return cell
     }
     
