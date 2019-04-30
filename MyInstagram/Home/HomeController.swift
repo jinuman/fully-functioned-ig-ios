@@ -110,15 +110,31 @@ class HomeController: UICollectionViewController {
             dictionaries.forEach({ (key, value) in
                 guard
                     let dictionary = value as? [String : Any],
-                    var post = Post(user: user, dictionary: dictionary) else { return }
+                    var post = Post(user: user, dictionary: dictionary),
+                    let uid = Auth.auth().currentUser?.uid else { return }
                 
                 post.id = key
-                self.posts.append(post)
+                Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    if
+                        let value = snapshot.value as? Int,
+                        value == 1 {
+                        post.hasLiked = true
+                    } else {
+                        post.hasLiked = false
+                    }
+                    self.posts.append(post)
+                    
+                    self.posts.sort(by: { (p0, p1) -> Bool in
+                        return p0.creationDate.compare(p1.creationDate) == .orderedDescending
+                    })
+                    self.collectionView.reloadData()
+                    
+                }, withCancel: { (error) in
+                    print("Failed to fetch like for post: ", error.localizedDescription)
+                })
+                
             })
-            self.posts.sort(by: { (p0, p1) -> Bool in
-                return p0.creationDate.compare(p1.creationDate) == .orderedDescending
-            })
-            self.collectionView.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
@@ -157,5 +173,32 @@ extension HomeController: HomePostCellDelegate {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
+    }
+    
+    func didLike(for cell: HomePostCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        
+        var post = self.posts[indexPath.item]
+        
+        guard
+            let postId = post.id,
+            let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let values = [uid : post.hasLiked ? 0 : 1]
+        Database.database().reference().child("likes").child(postId).updateChildValues(values) { [weak self] (err, ref) in
+            guard let self = self else { return }
+            
+            if let err = err {
+                print("Failed to like post: ", err.localizedDescription)
+                return
+            }
+            
+            print("Successfully liked post.")
+            post.hasLiked = !post.hasLiked
+            
+            self.posts[indexPath.item] = post
+            
+            self.collectionView.reloadItems(at: [indexPath])
+        }
     }
 }
