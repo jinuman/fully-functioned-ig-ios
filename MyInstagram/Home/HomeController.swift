@@ -152,6 +152,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else {
             fatalError("Failed to cast HomePostCell")
         }
+        #warning("This cause the crash when refreshing..")
         cell.post = posts[indexPath.item]
         cell.delegate = self
         return cell
