@@ -26,7 +26,10 @@ class CommentsController: UICollectionViewController {
         sendButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         
-        [self.commentTextField, sendButton].forEach {
+        let lineSeparatorView = UIView()
+        lineSeparatorView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
+        
+        [self.commentTextField, sendButton, lineSeparatorView].forEach {
             containerView.addSubview($0)
         }
         
@@ -45,6 +48,12 @@ class CommentsController: UICollectionViewController {
                           size: CGSize(width: 80, height: 0))
         sendButton.centerYInSuperview()
         sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
+        
+        lineSeparatorView.anchor(top: containerView.topAnchor,
+                                 leading: containerView.leadingAnchor,
+                                 bottom: nil,
+                                 trailing: containerView.trailingAnchor,
+                                 size: CGSize(width: 0, height: 0.5))
         
         return containerView
     }()
@@ -70,8 +79,10 @@ class CommentsController: UICollectionViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Comments"
-        collectionView.backgroundColor = .red
+        collectionView.backgroundColor = .white
         
+        collectionView.alwaysBounceVertical = true
+        collectionView.keyboardDismissMode = .interactive
 //        collectionView.contentInset.bottom = -50
 //        collectionView.scrollIndicatorInsets.bottom = -50
         
@@ -85,9 +96,13 @@ class CommentsController: UICollectionViewController {
         tabBarController?.tabBar.isHidden = true
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
+    }
+    
+    deinit {
+        print("CommentsController \(#function)")
     }
     
     @objc fileprivate func handleSend() {
@@ -122,10 +137,14 @@ class CommentsController: UICollectionViewController {
             guard
                 let self = self,
                 let dictionary = snapshot.value as? [String : Any],
-                let comment = Comment(dictionary: dictionary) else { return }
+                let uid = dictionary["uid"] as? String else { return }
             
-            self.comments.append(comment)
-            self.collectionView.reloadData()
+            
+            Database.fetchUser(with: uid, completion: { (user) in
+                guard let comment = Comment(user: user, dictionary: dictionary) else { return }
+                self.comments.append(comment)
+                self.collectionView.reloadData()
+            })
             
         }) { (error) in
             print(error.localizedDescription)
@@ -148,6 +167,21 @@ extension CommentsController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let guide = view.safeAreaLayoutGuide
-        return CGSize(width: guide.layoutFrame.width, height: 50)
+        
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let dummyCell = CommentCell(frame: frame)
+        dummyCell.comment = comments[indexPath.item]
+        dummyCell.layoutIfNeeded()  // after comment set
+        
+        let targetSize = CGSize(width: view.frame.width, height: 1000)
+        let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize)
+        
+        // Proper cell height for ImageView if text height is short
+        let height = max(40 + 8 + 8, estimatedSize.height)  // profileImageView width + padding
+        return CGSize(width: guide.layoutFrame.width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }

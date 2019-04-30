@@ -9,15 +9,18 @@
 import Foundation
 
 struct Comment {
+    
+    let user: User
     let uid: String
 //    let creationDate
     let text: String
     
-    init?(dictionary: [String : Any]) {
+    init?(user: User, dictionary: [String : Any]) {
         guard
             let uid = dictionary["uid"] as? String,
             let text = dictionary["text"] as? String else { return nil }
         
+        self.user = user
         self.uid = uid
         self.text = text
     }
