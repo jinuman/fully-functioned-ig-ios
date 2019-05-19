@@ -18,7 +18,8 @@ class UserSearchController: UICollectionViewController {
     private lazy var searchBar: UISearchBar = {
         let sb = UISearchBar()
         sb.placeholder = "Enter username"
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = UIColor(r: 240, g: 240, b: 240)
+        let textFieldInsideSearchBar = sb.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.backgroundColor = UIColor(r: 240, g: 240, b: 240)
         sb.delegate = self
         return sb
     }()

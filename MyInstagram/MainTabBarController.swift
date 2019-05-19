@@ -48,19 +48,19 @@ class MainTabBarController: UITabBarController {
         let likeNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "like_unselected"), selectedImage: #imageLiteral(resourceName: "like_selected"))
         
         // user profile
-        let layout = UICollectionViewFlowLayout()
-        let userProfileController = UserProfileController(collectionViewLayout: layout)
-        let userProfileNavController = UINavigationController(rootViewController: userProfileController)
-        userProfileNavController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
-        userProfileNavController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+        let userProfileController = templateNavController(unselectedImage: #imageLiteral(resourceName: "profile_unselected"),
+                                                          selectedImage: #imageLiteral(resourceName: "profile_selected"),
+                                                          rootViewController: UserProfileController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         tabBar.tintColor = .black
         
-        viewControllers = [homeNavController,
-                           searchNavController,
-                           plusNavController,
-                           likeNavController,
-                           userProfileNavController]
+        viewControllers = [
+            homeNavController,
+            searchNavController,
+            plusNavController,
+            likeNavController,
+            userProfileController
+        ]
         
         guard let items = tabBar.items else { return }
         for item in items {

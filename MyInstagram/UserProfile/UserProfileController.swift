@@ -48,6 +48,10 @@ class UserProfileController: UICollectionViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
+    fileprivate func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOut))
+    }
+    
     // Handling methods
     fileprivate func fetchUser() {
         let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
@@ -133,20 +137,17 @@ class UserProfileController: UICollectionViewController {
         }
     }
     
-    fileprivate func setupLogOutButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOut))
-    }
-    
     @objc fileprivate func handleSignOut() {
         let alertController = UIAlertController(title: "Do you want to sign out?", message: nil,
                                                 preferredStyle: .actionSheet)
         let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] (_) in
+            guard let self = self else { return }
             do {
                 try Auth.auth().signOut()
                 
                 let signInController = SignInController()
                 let navController = UINavigationController(rootViewController: signInController)
-                self?.present(navController, animated: true, completion: nil)
+                self.present(navController, animated: true, completion: nil)
                 
             } catch let signOutErr {
                 print("Failed to sign out: \(signOutErr.localizedDescription)")
@@ -161,7 +162,7 @@ class UserProfileController: UICollectionViewController {
     }
 }
 
-// Regarding collectionView
+// Regarding collectionView delegate flow layout
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? UserProfileHeader else { fatalError("Failed to cast UserProfileHeader") }

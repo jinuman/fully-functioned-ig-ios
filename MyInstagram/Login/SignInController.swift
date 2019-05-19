@@ -14,19 +14,15 @@ class SignInController: UIViewController {
     // MARK:- Screen properties
     private let logoContainerView: UIView = {
         let containerView = UIView()
+        containerView.backgroundColor = UIColor(r: 0, g: 120, b: 175)
         
         let logoImageView = UIImageView(image: #imageLiteral(resourceName: "Instagram_logo_white"))
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.contentMode = .scaleAspectFill
-        
         containerView.addSubview(logoImageView)
         
-        logoImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: 10).isActive = true
-        logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        logoImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        containerView.backgroundColor = UIColor(r: 0, g: 120, b: 175)
+        logoImageView.centerInSuperview()
+        logoImageView.constrainWidth(constant: 200)
+        logoImageView.constrainHeight(constant: 50)
         return containerView
     }()
     
@@ -67,12 +63,14 @@ class SignInController: UIViewController {
     private let dontHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         
-        let attributedTitle = NSMutableAttributedString(string: "Don't hava an account?  ",
-                                                        attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
-                                                                     NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        attributedTitle.append(NSAttributedString(string: "Sign Up",
-                                                  attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14),
-                                                               NSAttributedString.Key.foregroundColor: UIColor(r: 17, g: 154, b: 237)]))
+        let attributedTitle = NSMutableAttributedString(string: "Don't hava an account?  ", attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray
+            ])
+        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor: UIColor(r: 17, g: 154, b: 237)
+            ]))
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleDontHaveAccount), for: .touchUpInside)
         return button
@@ -92,7 +90,12 @@ class SignInController: UIViewController {
     
     // MARK:- Setup screen constraints method
     fileprivate func setupSubviewsForSignIn() {
-        [logoContainerView, dontHaveAccountButton].forEach {
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        
+        [logoContainerView, stackView, dontHaveAccountButton].forEach {
             view.addSubview($0)
         }
         let guide = view.safeAreaLayoutGuide
@@ -103,13 +106,6 @@ class SignInController: UIViewController {
                                  trailing: view.trailingAnchor,
                                  padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0),
                                  size: CGSize(width: 0, height: 150))
-        
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
         
         stackView.anchor(top: logoContainerView.bottomAnchor,
                          leading: guide.leadingAnchor,
@@ -134,9 +130,7 @@ class SignInController: UIViewController {
     @objc func validationCheckForSignIn() {
         guard
             let email = emailTextField.text,
-            let password = passwordTextField.text else {
-                return
-        }
+            let password = passwordTextField.text else { return }
         guard
             email.isEmpty == false,
             password.isEmpty == false else {
@@ -156,6 +150,7 @@ class SignInController: UIViewController {
                 return
         }
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] (result, error) in
+            guard let self = self else { return }
             if let error = error {
                 print("Failed to sign in: \(error.localizedDescription)")
                 return
@@ -167,7 +162,7 @@ class SignInController: UIViewController {
                 return
             }
             mainTabBarController.setupViewControllers()
-            self?.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }

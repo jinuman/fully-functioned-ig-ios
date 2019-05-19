@@ -66,12 +66,14 @@ class SignUpController: UIViewController {
     private let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         
-        let attributedTitle = NSMutableAttributedString(string: "Already hava an account?  ",
-                                                        attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
-                                                                     NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        attributedTitle.append(NSAttributedString(string: "Sign In",
-                                                  attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14),
-                                                               NSAttributedString.Key.foregroundColor: UIColor(r: 17, g: 154, b: 237)]))
+        let attributedTitle = NSMutableAttributedString(string: "Already hava an account?  ", attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray
+            ])
+        attributedTitle.append(NSAttributedString(string: "Sign In", attributes: [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor: UIColor(r: 17, g: 154, b: 237)
+            ]))
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleAlreadyHaveAccount), for: .touchUpInside)
         return button
@@ -87,7 +89,13 @@ class SignUpController: UIViewController {
     // MARK:- Setup screen constraints method
     fileprivate func setupSubviewsForSignUp() {
         let guide = view.safeAreaLayoutGuide
-        [plusPhotoButton, alreadyHaveAccountButton].forEach {
+        
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        
+        [plusPhotoButton, stackView, alreadyHaveAccountButton].forEach {
             view.addSubview($0)
         }
         
@@ -97,13 +105,6 @@ class SignUpController: UIViewController {
         plusPhotoButton.anchor(top: guide.topAnchor, leading: nil, bottom: nil, trailing: nil,
                                padding: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0),
                                size: CGSize(width: 140, height: 140))
-        
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
         
         stackView.anchor(top: plusPhotoButton.bottomAnchor,
                          leading: guide.leadingAnchor,
@@ -124,9 +125,7 @@ class SignUpController: UIViewController {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
-            let password = passwordTextField.text else {
-                return
-        }
+            let password = passwordTextField.text else { return }
         guard
             email.isEmpty == false,
             username.isEmpty == false,
@@ -150,9 +149,7 @@ class SignUpController: UIViewController {
         guard
             let email = emailTextField.text,
             let username = usernameTextField.text,
-            let password = passwordTextField.text else {
-                return
-        }
+            let password = passwordTextField.text else { return }
         
         // 신규 유저 생성
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] (result, err) in
@@ -234,9 +231,7 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
             selectedImageFromPicker = originalImage
         }
         
-        guard let selectedImage = selectedImageFromPicker else {
-            return
-        }
+        guard let selectedImage = selectedImageFromPicker else { return }
         
         plusPhotoButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
         plusPhotoButton.imageView?.contentMode = .scaleAspectFill
@@ -244,6 +239,7 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
         plusPhotoButton.layer.masksToBounds = true
         plusPhotoButton.layer.borderColor = UIColor.black.cgColor
         plusPhotoButton.layer.borderWidth = 3
+        
         dismiss(animated: true, completion: nil)
     }
     
