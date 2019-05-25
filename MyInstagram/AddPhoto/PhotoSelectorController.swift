@@ -93,9 +93,8 @@ class PhotoSelectorController: UICollectionViewController {
                 imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { [weak self] (image, info) in
                     guard
                         let self = self,
-                        let image = image else {
-                            return
-                    }
+                        let image = image else { return }
+                    
                     self.images.append(image)
                     self.assets.append(asset)
                     
