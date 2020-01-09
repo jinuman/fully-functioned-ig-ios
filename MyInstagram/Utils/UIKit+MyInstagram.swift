@@ -8,6 +8,29 @@
 
 import UIKit
 
+extension NSObjectProtocol {
+    static var className: String {
+        return "\(self)"
+    }
+    var className: String {
+        return Self.className
+    }
+}
+
+extension UIViewController {
+    func deinitLog(objectName: String? = nil) {
+        #if DEBUG
+        print("\n===============================================")
+        if let objectName = objectName {
+            print("♻️ \(objectName) deinit ♻️")
+        } else {
+            print("♻️ \(self.className) deinit ♻️")
+        }
+        print("===============================================\n")
+        #endif
+    }
+}
+
 extension UIColor {
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat) {
         self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
@@ -115,5 +138,6 @@ extension UIView {
 struct AnchoredConstraints {
     var top, leading, bottom, trailing, width, height: NSLayoutConstraint?
 }
+
 
 
