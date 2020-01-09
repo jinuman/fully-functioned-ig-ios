@@ -1,4 +1,6 @@
 PODS:
+  - Alamofire (4.9.1)
+  - Differentiator (4.0.1)
   - Firebase/Auth (5.20.2):
     - Firebase/CoreOnly
     - FirebaseAuth (= 5.4.2)
@@ -68,21 +70,65 @@ PODS:
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.1)
+  - Kingfisher (5.12.0):
+    - Kingfisher/Core (= 5.12.0)
+  - Kingfisher/Core (5.12.0)
   - leveldb-library (1.20)
+  - Moya (13.0.1):
+    - Moya/Core (= 13.0.1)
+  - Moya/Core (13.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.1)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - R.swift (5.1.0):
+    - R.swift.Library (~> 5.1.0)
+  - R.swift.Library (5.1.0)
+  - ReactorKit (2.0.1):
+    - RxSwift (~> 5.0)
+  - Result (4.1.0)
+  - RxCocoa (5.0.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.0.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.1)
+  - RxSwiftExt (5.2.0):
+    - RxSwiftExt/Core (= 5.2.0)
+    - RxSwiftExt/RxCocoa (= 5.2.0)
+  - RxSwiftExt/Core (5.2.0):
+    - RxSwift (~> 5.0)
+  - RxSwiftExt/RxCocoa (5.2.0):
+    - RxCocoa (~> 5.0)
+    - RxSwiftExt/Core
+  - SnapKit (5.0.1)
+  - SwiftyBeaver (1.8.4)
 
 DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - Kingfisher
+  - Moya
+  - R.swift
+  - ReactorKit
+  - RxCocoa
+  - RxDataSources
+  - RxSwift
+  - RxSwiftExt
+  - SnapKit
+  - SwiftyBeaver
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -96,8 +142,26 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+  trunk:
+    - Alamofire
+    - Differentiator
+    - Kingfisher
+    - Moya
+    - R.swift
+    - R.swift.Library
+    - ReactorKit
+    - Result
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
+    - RxSwiftExt
+    - SnapKit
+    - SwiftyBeaver
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
   FirebaseAnalytics: ece1aa57a4f43c64d53a648b5a5e05151aae947b
   FirebaseAuth: dd7bbf03a5aee0eafb3a1aee4d2812bd74bac890
@@ -109,9 +173,22 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  Kingfisher: dc6e0f53bb5b12c3e75bedb0e01bbd7a640eea69
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  R.swift: 8cbc4fc69b740305b6a17c8a8ed968eb788962d9
+  R.swift.Library: fa85ce1e0d0b7e818cd9e080df910ba54d2776cc
+  ReactorKit: a63c5e11e0fd32d59d672e54178b0ed2876b764b
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
+  RxSwiftExt: 4ca80336f43c28f11a2825cdd2fc61dd6c044697
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SwiftyBeaver: f9a9aba96a6a6166e21682377804d728b0d20b95
 
-PODFILE CHECKSUM: e782671a219d9ee704167753e4bddef7b2e4ca1d
+PODFILE CHECKSUM: d6aa730fb150f1f5513a89ec0966b92322fae12d
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.8.4

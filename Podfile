@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'MyInstagram' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -7,10 +7,31 @@ target 'MyInstagram' do
 
   # Pods for MyInstagram
 
+  # Rx
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'ReactorKit'
+  pod 'RxSwiftExt'
+  pod 'RxDataSources'
+
+  # Networking
+  pod 'Moya'
+
+  # Firebase
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+
+  # Auto-Layout
+  pod 'SnapKit'
+
+  # Logging
+  pod 'SwiftyBeaver'
+
+  # etc
+  pod 'R.swift'
+  pod 'Kingfisher'
 
   target 'MyInstagramTests' do
     inherit! :search_paths
