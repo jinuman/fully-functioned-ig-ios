@@ -30,6 +30,7 @@ class SignInController: UIViewController {
         let tf = UITextField()
         tf.placeholder = "Email"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        tf.textColor = .black
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.addTarget(self, action: #selector(validationCheckForSignIn), for: .editingChanged)
@@ -38,6 +39,7 @@ class SignInController: UIViewController {
     
     private let passwordTextField: UITextField = {
         let tf = UITextField()
+        tf.textColor = .black
         tf.isSecureTextEntry = true
         tf.textContentType = .password
         tf.placeholder = "Password"
@@ -161,7 +163,7 @@ class SignInController: UIViewController {
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
                 return
             }
-            mainTabBarController.setupViewControllers()
+            mainTabBarController.configureViewControllers()
             self.dismiss(animated: true, completion: nil)
         }
     }

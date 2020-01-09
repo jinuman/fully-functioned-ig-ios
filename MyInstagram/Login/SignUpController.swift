@@ -21,6 +21,7 @@ class SignUpController: UIViewController {
     
     private let emailTextField: UITextField = {
         let tf = UITextField()
+        tf.textColor = .black
         tf.placeholder = "Email"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -31,6 +32,7 @@ class SignUpController: UIViewController {
     
     private let usernameTextField: UITextField = {
         let tf = UITextField()
+        tf.textColor = .black
         tf.placeholder = "Username"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -41,6 +43,7 @@ class SignUpController: UIViewController {
     
     private let passwordTextField: UITextField = {
         let tf = UITextField()
+        tf.textColor = .black
         tf.isSecureTextEntry = true
         tf.textContentType = .password
         tf.placeholder = "Password"
@@ -210,7 +213,7 @@ class SignUpController: UIViewController {
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {
                 return
             }
-            mainTabBarController.setupViewControllers()
+            mainTabBarController.configureViewControllers()
             self?.dismiss(animated: true, completion: nil)
         })
     }
