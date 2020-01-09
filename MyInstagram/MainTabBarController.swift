@@ -7,54 +7,71 @@
 //
 
 import UIKit
+
 import Firebase
 
 class MainTabBarController: UITabBarController {
     
-    // MARK:- Life cycle methods
+    // MARK: - Initializing
+    
+    deinit {
+        self.deinitLog(objectName: self.className)
+    }
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.delegate = self    // UITabBarControllerDelegate
         
         checkUserIsLoggedIn()
-        setupViewControllers()
+        configureViewControllers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         checkUserIsLoggedIn()
-        setupViewControllers()
+        configureViewControllers()
     }
     
-    deinit {
-        print("MainTabBarController \(#function)")
-    }
-    
-    // MARK:- Regarding screen methods
+    // MARK: - Methods
     
     // Refresh UI by logged in user.
-    func setupViewControllers() {
+    func configureViewControllers() {
         // home
-        let homeNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "home_unselected"),
-                                                      selectedImage: #imageLiteral(resourceName: "home_selected"),
-                                                      rootViewController: HomeController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let homeNavController = templateNavController(
+            unselectedImage: #imageLiteral(resourceName: "home_unselected"),
+            selectedImage: #imageLiteral(resourceName: "home_selected"),
+            rootViewController: HomeController(
+                collectionViewLayout: UICollectionViewFlowLayout())
+        )
+        
         // search
-        let searchNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "search_unselected"),
-                                                        selectedImage: #imageLiteral(resourceName: "search_selected"),
-                                                        rootViewController: UserSearchController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let searchNavController = templateNavController(
+            unselectedImage: #imageLiteral(resourceName: "search_unselected"),
+            selectedImage: #imageLiteral(resourceName: "search_selected"),
+            rootViewController: UserSearchController(
+                collectionViewLayout: UICollectionViewFlowLayout())
+        )
         
-        let plusNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "plus_unselected"), selectedImage: #imageLiteral(resourceName: "plus_unselected"))
+        let plusNavController = templateNavController(
+            unselectedImage: #imageLiteral(resourceName: "plus_unselected"),
+            selectedImage: #imageLiteral(resourceName: "plus_unselected")
+        )
         
-        let likeNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "like_unselected"), selectedImage: #imageLiteral(resourceName: "like_selected"))
+        let likeNavController = templateNavController(
+            unselectedImage: #imageLiteral(resourceName: "like_unselected"),
+            selectedImage: #imageLiteral(resourceName: "like_selected")
+        )
         
         // user profile
-        let userProfileController = templateNavController(unselectedImage: #imageLiteral(resourceName: "profile_unselected"),
-                                                          selectedImage: #imageLiteral(resourceName: "profile_selected"),
-                                                          rootViewController: UserProfileController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let userProfileController = templateNavController(
+            unselectedImage: #imageLiteral(resourceName: "profile_unselected"),
+            selectedImage: #imageLiteral(resourceName: "profile_selected"),
+            rootViewController: UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        )
         
-        tabBar.tintColor = .black
+        self.tabBar.tintColor = .black
         
-        viewControllers = [
+        self.viewControllers = [
             homeNavController,
             searchNavController,
             plusNavController,
@@ -62,15 +79,18 @@ class MainTabBarController: UITabBarController {
             userProfileController
         ]
         
-        guard let items = tabBar.items else { return }
+        guard let items = self.tabBar.items else { return }
         for item in items {
             item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
     }
     
-    fileprivate func templateNavController(unselectedImage: UIImage,
-                                           selectedImage: UIImage,
-                                           rootViewController: UIViewController = UIViewController()) -> UINavigationController {
+    private func templateNavController(
+        unselectedImage: UIImage,
+        selectedImage: UIImage,
+        rootViewController: UIViewController = UIViewController())
+        -> UINavigationController
+    {
         let viewController = rootViewController
         let navController = UINavigationController(rootViewController: viewController)
         navController.tabBarItem.image = unselectedImage
@@ -78,9 +98,8 @@ class MainTabBarController: UITabBarController {
         return navController
     }
     
-    // MARK:- Handling methods
-    fileprivate func checkUserIsLoggedIn() {
-        // if user is not logged in
+    private func checkUserIsLoggedIn() {
+        // If user is not logged in
         if Auth.auth().currentUser == nil {
             DispatchQueue.main.async {
                 let signInController = SignInController()
@@ -90,12 +109,18 @@ class MainTabBarController: UITabBarController {
             return
         }
     }
+    
 }
 
-// MARK:- Regarding UITabBarControllerDelegate
+// MARK: - Extensions
+
 extension MainTabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let index = viewControllers?.firstIndex(of: viewController)
+        
+        print(index)
+        print(viewController.self)
+        
         if index == 2 {
             let layout = UICollectionViewFlowLayout()
             let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
