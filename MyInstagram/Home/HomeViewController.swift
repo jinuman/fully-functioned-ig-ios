@@ -1,5 +1,5 @@
 //
-//  HomeController.swift
+//  HomeViewController.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 22/04/2019.
@@ -7,62 +7,95 @@
 //
 
 import UIKit
+
+import SnapKit
 import Firebase
 
-class HomeController: UICollectionViewController {
+class HomeViewController: UIViewController {
     
     private let cellId = "cellId"
     var posts = [Post]()
     
-    // MARK:- Life cycle methods
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
+        return collectionView
+    }()
+    
+    
+    // MARK: - Initializing
+    
+    deinit {
+        
+    }
+    
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureNavigationItems()
+        self.configureLayout()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed),
-                                               name: SharePhotoController.updateFeedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.handleUpdateFeed),
+            name: SharePhotoController.updateFeedNotificationName,
+            object: nil
+        )
         
-        collectionView.backgroundColor = .white
-        
-        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
-        
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-        
-        setupNavigationItems()
-        
-        fetchAllPosts()
+        self.fetchAllPosts()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        collectionView.collectionViewLayout.invalidateLayout()
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    deinit {
-        print("HomeController \(#function)")
-    }
+    // MARK: - Methods
     
-    // MARK:- Screen methods
-    fileprivate func setupNavigationItems() {
-        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo2"))
+    private func configureNavigationItems() {
+        guard let cameraImage: UIImage = UIImage(named: "camera3"),
+        let logoImage: UIImage = UIImage(named: "logo2") else { return }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "camera3").withRenderingMode(.alwaysOriginal), style: .plain,
-                                                           target: self, action: #selector(handleCamera))
+        self.navigationItem.titleView = UIImageView(image: logoImage)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: cameraImage.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(self.handleCamera)
+        )
     }
     
-    // MARK:- Handling methods
+    private func configureLayout() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        self.collectionView.refreshControl = refreshControl
+        
+        self.view.addSubview(self.collectionView)
+        
+        self.collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
     @objc fileprivate func handleCamera() {
         let cameraController = CameraController()
-        present(cameraController, animated: true, completion: nil)
+        self.present(cameraController, animated: true, completion: nil)
     }
     
     @objc fileprivate func handleUpdateFeed() {
-        handleRefresh()
+        self.handleRefresh()
     }
     
     @objc fileprivate func handleRefresh() {
-        posts.removeAll()
-        fetchAllPosts()
+        self.posts.removeAll()
+        self.fetchAllPosts()
     }
     
     fileprivate func fetchAllPosts() {
@@ -142,13 +175,14 @@ class HomeController: UICollectionViewController {
     }
 }
 
-// MARK:- Regarding CollectionView
-extension HomeController: UICollectionViewDelegateFlowLayout {
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
+// MARK: - Extensions
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.posts.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else {
             fatalError("Failed to cast HomePostCell")
         }
@@ -170,8 +204,11 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK:- Regarding HomePostCellDelegate
-extension HomeController: HomePostCellDelegate {
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+}
+
+extension HomeViewController: HomePostCellDelegate {
     func didTapComment(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post

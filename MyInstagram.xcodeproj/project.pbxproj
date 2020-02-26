@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,7 +39,7 @@
 		36D026D32272EF56005C4960 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D026D22272EF56005C4960 /* CameraController.swift */; };
 		36E2619222787723002A7164 /* CommentInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2619122787723002A7164 /* CommentInputAccessoryView.swift */; };
 		36FCDACB226DBE5D00B05CD6 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACA226DBE5D00B05CD6 /* CustomImageView.swift */; };
-		36FCDACE226DEC1E00B05CD6 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACD226DEC1E00B05CD6 /* HomeController.swift */; };
+		36FCDACE226DEC1E00B05CD6 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACD226DEC1E00B05CD6 /* HomeViewController.swift */; };
 		36FCDAD0226DED5000B05CD6 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FCDACF226DED5000B05CD6 /* HomePostCell.swift */; };
 		8690B2A8CF0B872FA499F3FD /* Pods_MyInstagramTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D782E1BE38A4130A212AF0FD /* Pods_MyInstagramTests.framework */; };
 /* End PBXBuildFile section */
@@ -92,7 +92,7 @@
 		36D026D22272EF56005C4960 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		36E2619122787723002A7164 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
 		36FCDACA226DBE5D00B05CD6 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
-		36FCDACD226DEC1E00B05CD6 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		36FCDACD226DEC1E00B05CD6 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		36FCDACF226DED5000B05CD6 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		571AC47C7D4A62D07B5D8F08 /* Pods-MyInstagramTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyInstagramTests.debug.xcconfig"; path = "Target Support Files/Pods-MyInstagramTests/Pods-MyInstagramTests.debug.xcconfig"; sourceTree = "<group>"; };
 		771258C186FE4E327F99D256 /* Pods-MyInstagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyInstagram.release.xcconfig"; path = "Target Support Files/Pods-MyInstagram/Pods-MyInstagram.release.xcconfig"; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 		36FCDACC226DEC0300B05CD6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				36FCDACD226DEC1E00B05CD6 /* HomeController.swift */,
+				36FCDACD226DEC1E00B05CD6 /* HomeViewController.swift */,
 				36FCDACF226DED5000B05CD6 /* HomePostCell.swift */,
 				3640970122771D00006561C9 /* CommentsController.swift */,
 				3617DC46227801FF00506AF8 /* CommentCell.swift */,
@@ -478,7 +478,7 @@
 				36FCDAD0226DED5000B05CD6 /* HomePostCell.swift in Sources */,
 				3654D15C223FA78800933705 /* PhotoSelectorHeader.swift in Sources */,
 				36C51203222D3A1D0071AE8C /* SignInController.swift in Sources */,
-				36FCDACE226DEC1E00B05CD6 /* HomeController.swift in Sources */,
+				36FCDACE226DEC1E00B05CD6 /* HomeViewController.swift in Sources */,
 				36296E7A226EF5B300B21015 /* Firebase+MyInstagram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -641,7 +641,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinuman.MyInstagram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinuman.myinstagram;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -660,7 +660,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinuman.MyInstagram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinuman.myinstagram;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

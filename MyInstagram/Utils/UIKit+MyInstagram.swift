@@ -29,6 +29,14 @@ extension UIViewController {
         print("===============================================\n")
         #endif
     }
+    
+    static func toNavigationController(isHiddenBar: Bool = false) -> UINavigationController {
+        let `self` = self.init()
+        let navigationController = UINavigationController(rootViewController: self)
+        navigationController.isNavigationBarHidden = isHiddenBar
+        navigationController.interactivePopGestureRecognizer?.delegate = nil
+        return navigationController
+    }
 }
 
 extension UIColor {
