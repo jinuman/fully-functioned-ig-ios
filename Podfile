@@ -10,9 +10,9 @@ target 'MyInstagram' do
   # Rx
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'RxDataSources'
   pod 'ReactorKit'
   pod 'RxSwiftExt'
-  pod 'RxDataSources'
 
   # Networking
   pod 'Moya'
@@ -31,7 +31,7 @@ target 'MyInstagram' do
 
   # etc
   pod 'R.swift'
-  pod 'Kingfisher'
+  pod 'Nuke'
 
   target 'MyInstagramTests' do
     inherit! :search_paths

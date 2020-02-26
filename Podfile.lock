@@ -70,9 +70,6 @@ PODS:
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.1)
-  - Kingfisher (5.12.0):
-    - Kingfisher/Core (= 5.12.0)
-  - Kingfisher/Core (5.12.0)
   - leveldb-library (1.20)
   - Moya (13.0.1):
     - Moya/Core (= 13.0.1)
@@ -84,6 +81,7 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - Nuke (8.4.0)
   - R.swift (5.1.0):
     - R.swift.Library (~> 5.1.0)
   - R.swift.Library (5.1.0)
@@ -116,8 +114,8 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
-  - Kingfisher
   - Moya
+  - Nuke
   - R.swift
   - ReactorKit
   - RxCocoa
@@ -145,8 +143,8 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Differentiator
-    - Kingfisher
     - Moya
+    - Nuke
     - R.swift
     - R.swift.Library
     - ReactorKit
@@ -173,10 +171,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
-  Kingfisher: dc6e0f53bb5b12c3e75bedb0e01bbd7a640eea69
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  Nuke: fa6f784c4f7e1c0f9313668510186c68b7af2509
   R.swift: 8cbc4fc69b740305b6a17c8a8ed968eb788962d9
   R.swift.Library: fa85ce1e0d0b7e818cd9e080df910ba54d2776cc
   ReactorKit: a63c5e11e0fd32d59d672e54178b0ed2876b764b
@@ -189,6 +187,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftyBeaver: f9a9aba96a6a6166e21682377804d728b0d20b95
 
-PODFILE CHECKSUM: d6aa730fb150f1f5513a89ec0966b92322fae12d
+PODFILE CHECKSUM: c11e0710a964f1e070e1ebc55cf2f0fd3a3a5416
 
 COCOAPODS: 1.8.4
