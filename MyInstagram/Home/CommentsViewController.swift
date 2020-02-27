@@ -28,13 +28,13 @@ class CommentsViewController: UIViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
         
-        collectionView.contentInset.bottom = 0
+        collectionView.contentInset.bottom = 50
         collectionView.scrollIndicatorInsets.bottom = 0
         
         return collectionView
     }()
     
-    private lazy var inputContainerView: CommentInputAccessoryView = {
+    private lazy var commentInputAccessoryView: CommentInputAccessoryView = {
         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
         let view = CommentInputAccessoryView(frame: frame)
         view.delegate = self
@@ -49,7 +49,7 @@ class CommentsViewController: UIViewController {
     
     override var inputAccessoryView: UIView? {
         get {
-            return self.inputContainerView
+            return self.commentInputAccessoryView
         }
     }
     
@@ -67,10 +67,7 @@ class CommentsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.configureLayout()
-        
-        self.navigationItem.title = "Comments"
         
         self.fetchComments()
     }
@@ -78,6 +75,8 @@ class CommentsViewController: UIViewController {
     // MARK: - Methods
     
     private func configureLayout() {
+        self.navigationItem.title = "Comments"
+        
         self.view.backgroundColor = UIColor.white
         
         self.view.addSubviews([
@@ -121,7 +120,7 @@ extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDe
         numberOfItemsInSection section: Int)
         -> Int
     {
-        return comments.count
+        return self.comments.count
     }
     
     func collectionView(
@@ -130,7 +129,7 @@ extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDe
         -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(cellType: CommentCell.self, for: indexPath)
-        cell.comment = comments[indexPath.item]
+        cell.comment = self.comments[indexPath.item]
         return cell
     }
 }
@@ -138,9 +137,12 @@ extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDe
 extension CommentsViewController: UICollectionViewDelegateFlowLayout {
     
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let guide = view.safeAreaLayoutGuide
-        
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath)
+        -> CGSize
+    {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
         let dummyCell = CommentCell(frame: frame)
         dummyCell.comment = comments[indexPath.item]
@@ -154,32 +156,40 @@ extension CommentsViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: guide.layoutFrame.width, height: height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int)
+        -> CGFloat
+    {
         return 0
     }
 }
 
 extension CommentsViewController: CommentInputAccessoryViewDelegate {
     func didSend(for comment: String) {
-        guard
-            let uid = Auth.auth().currentUser?.uid,
+        guard let uid = Auth.auth().currentUser?.uid,
             let postId = post?.id else { return }
         
-        let values = [
-            "uid" : uid,
-            "creationDate" : Date().timeIntervalSince1970,
-            "text" : comment
-            ] as [String : Any]
+        let values: [String: Any] = [
+            "uid": uid,
+            "creationDate": Date().timeIntervalSince1970,
+            "text": comment
+        ]
         
-        Database.database().reference().child("comments").child(postId).childByAutoId().updateChildValues(values) { [weak self] (err, ref) in
-            if let err = err {
-                print("Failed to insert comment:", err.localizedDescription)
-                return
-            }
-            guard let self = self else { return }
-            
-            print("Successfully inserted comment.")
-            self.inputContainerView.clearCommentTextView()
+        Database.database().reference()
+            .child("comments")
+            .child(postId)
+            .childByAutoId()
+            .updateChildValues(values) { [weak self] (err, ref) in
+                guard let `self` = self else { return }
+                if let err = err {
+                    print("Failed to insert comment:", err.localizedDescription)
+                    return
+                }
+                
+                log.debugPrint("Successfully inserted comment.", level: .debug)
+                self.commentInputAccessoryView.clearCommentTextView()
         }
     }
 }
