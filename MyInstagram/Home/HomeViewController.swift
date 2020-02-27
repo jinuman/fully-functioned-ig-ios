@@ -17,9 +17,7 @@ class HomeViewController: UIViewController {
     
     private lazy var postCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -226,7 +224,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomePostCellDelegate {
     func didTapComment(post: Post) {
-        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        let commentsController = CommentsViewController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
     }
