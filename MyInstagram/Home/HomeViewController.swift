@@ -50,7 +50,10 @@ class HomeViewController: UIViewController {
         self.fetchAllPosts()
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator)
+    {
         self.postCollectionView.collectionViewLayout.invalidateLayout()
     }
     
