@@ -34,23 +34,25 @@ class UserSearchController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        self.collectionView.backgroundColor = .white
         
-        navigationController?.navigationBar.addSubview(searchBar)
+        self.navigationController?.navigationBar.addSubview(searchBar)
         
         let navBar = navigationController?.navigationBar
-        searchBar.anchor(top: navBar?.topAnchor,
-                         leading: navBar?.leadingAnchor,
-                         bottom: navBar?.bottomAnchor,
-                         trailing: navBar?.trailingAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8))
+        self.searchBar.anchor(
+            top: navBar?.topAnchor,
+            leading: navBar?.leadingAnchor,
+            bottom: navBar?.bottomAnchor,
+            trailing: navBar?.trailingAnchor,
+            padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        )
         
-        collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: cellId)
+        self.collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: cellId)
         
-        collectionView.alwaysBounceVertical = true
-        collectionView.keyboardDismissMode = .onDrag
+        self.collectionView.alwaysBounceVertical = true
+        self.collectionView.keyboardDismissMode = .onDrag
         
-        fetchUsers()
+        self.fetchUsers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
