@@ -113,6 +113,8 @@ class CommentsViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions
+
 extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
