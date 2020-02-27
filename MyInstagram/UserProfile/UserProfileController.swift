@@ -35,7 +35,7 @@ class UserProfileController: UICollectionViewController {
         
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
-        collectionView.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: homePostCellId)
+        collectionView.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: homePostCellId)
         
         navigationController?.navigationBar.prefersLargeTitles = false
         
@@ -196,8 +196,8 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
             cell.post = posts[indexPath.item]
             return cell
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? PostCollectionViewCell else {
-                fatalError("Failed to cast PostCollectionViewCell inside UserProfileController")
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? HomePostCollectionViewCell else {
+                fatalError("Failed to cast HomePostCollectionViewCell inside UserProfileController")
             }
             cell.post = posts[indexPath.item]
             return cell

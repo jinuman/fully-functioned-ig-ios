@@ -1,5 +1,5 @@
 //
-//  PostCollectionViewCell.swift
+//  HomePostCollectionViewCell.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 22/04/2019.
@@ -10,10 +10,10 @@ import UIKit
 
 protocol HomePostCellDelegate: class {
     func didTapComment(post: Post)
-    func didLike(for cell: PostCollectionViewCell)
+    func didLike(for cell: HomePostCollectionViewCell)
 }
 
-class PostCollectionViewCell: UICollectionViewCell {
+class HomePostCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     

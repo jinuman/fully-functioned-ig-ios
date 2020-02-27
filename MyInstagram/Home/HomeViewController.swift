@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register([PostCollectionViewCell.self])
+        collectionView.register([HomePostCollectionViewCell.self])
         return collectionView
     }()
     
@@ -194,7 +194,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(
-            cellType: PostCollectionViewCell.self,
+            cellType: HomePostCollectionViewCell.self,
             for: indexPath)
         
         if indexPath.item < posts.count {
@@ -231,7 +231,7 @@ extension HomeViewController: HomePostCellDelegate {
         navigationController?.pushViewController(commentsController, animated: true)
     }
     
-    func didLike(for cell: PostCollectionViewCell) {
+    func didLike(for cell: HomePostCollectionViewCell) {
         guard let indexPath = postCollectionView.indexPath(for: cell) else { return }
         
         var post = self.posts[indexPath.item]
