@@ -13,7 +13,6 @@ import Firebase
 
 class HomeViewController: UIViewController {
     
-    private let cellId = "cellId"
     var posts = [Post]()
     
     private lazy var collectionView: UICollectionView = {
@@ -24,10 +23,9 @@ class HomeViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register([HomePostCell.self])
         return collectionView
     }()
-    
     
     // MARK: - Initializing
     
@@ -84,26 +82,26 @@ class HomeViewController: UIViewController {
         }
     }
     
-    @objc fileprivate func handleCamera() {
+    @objc private func handleCamera() {
         let cameraController = CameraController()
         self.present(cameraController, animated: true, completion: nil)
     }
     
-    @objc fileprivate func handleUpdateFeed() {
+    @objc private func handleUpdateFeed() {
         self.handleRefresh()
     }
     
-    @objc fileprivate func handleRefresh() {
+    @objc private func handleRefresh() {
         self.posts.removeAll()
         self.fetchAllPosts()
     }
     
-    fileprivate func fetchAllPosts() {
+    private func fetchAllPosts() {
         fetchPosts()
         fetchFollowingUserIds()
     }
     
-    fileprivate func fetchPosts() {
+    private func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         Database.fetchUser(with: uid) { [weak self] (user) in
@@ -112,7 +110,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    fileprivate func fetchFollowingUserIds() {
+    private func fetchFollowingUserIds() {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         Database.database().reference().child("following").child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
             
@@ -130,7 +128,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    fileprivate func fetchPosts(with user: User) {
+    private func fetchPosts(with user: User) {
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
             
@@ -177,24 +175,43 @@ class HomeViewController: UIViewController {
 
 // MARK: - Extensions
 
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int)
+        -> Int
+    {
         return self.posts.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else {
-            fatalError("Failed to cast HomePostCell")
-        }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath)
+        -> UICollectionViewCell
+    {
+        let cell = collectionView.dequeueReusableCell(
+            cellType: HomePostCell.self,
+            for: indexPath)
         
         if indexPath.item < posts.count {
             cell.post = posts[indexPath.item]
         }
+        
         cell.delegate = self
+        
         return cell
     }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath)
+        -> CGSize
+    {
         let width: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
         var height: CGFloat = 40 + 8 + 8 // userProfileImageView + padding
         height += width
@@ -202,10 +219,6 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         height += 60 // caption field
         return CGSize(width: width, height: height)
     }
-}
-
-extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
 }
 
 extension HomeViewController: HomePostCellDelegate {
