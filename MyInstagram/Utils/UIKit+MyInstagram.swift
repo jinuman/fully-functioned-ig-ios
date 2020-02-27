@@ -179,5 +179,13 @@ struct AnchoredConstraints {
     var top, leading, bottom, trailing, width, height: NSLayoutConstraint?
 }
 
+extension CGSize {
+    
+    init(all: CGFloat) {
+        self.init(width: all, height: all)
+    }
+    
+}
+
 
 

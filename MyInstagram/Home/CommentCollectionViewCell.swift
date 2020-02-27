@@ -1,5 +1,5 @@
 //
-//  CommentCell.swift
+//  CommentCollectionViewCell.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 30/04/2019.
@@ -8,9 +8,10 @@
 
 import UIKit
 
-class CommentCell: UICollectionViewCell {
+class CommentCollectionViewCell: UICollectionViewCell {
     
-    // MARK:- Properties
+    // MARK: - Properties
+    
     var comment: Comment? {
         didSet {
             guard let comment = comment else { return }
@@ -18,8 +19,8 @@ class CommentCell: UICollectionViewCell {
             let attributedText = NSMutableAttributedString(string: comment.user.username, attributes: [.font : UIFont.boldSystemFont(ofSize: 14)])
             attributedText.append(NSAttributedString(string: " \(comment.text)", attributes: [.font : UIFont.systemFont(ofSize: 14)]))
             
-            commentTextView.attributedText = attributedText
-            profileImageView.loadImage(with: comment.user.profileImageUrl)
+            self.commentTextView.attributedText = attributedText
+            self.profileImageView.loadImage(with: comment.user.profileImageUrl)
         }
     }
     
@@ -37,27 +38,27 @@ class CommentCell: UICollectionViewCell {
         return tv
     }()
     
-    // MARK:- Initializer
+    // MARK:- Initializing
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        [profileImageView, commentTextView].forEach {
-            addSubview($0)
+        self.addSubviews([
+            self.profileImageView,
+            self.commentTextView
+        ])
+        
+        self.profileImageView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(8.0)
+            $0.size.equalTo(CGSize(all: 40))
         }
         
-        profileImageView.anchor(top: topAnchor,
-                                leading: leadingAnchor,
-                                bottom: nil,
-                                trailing: nil,
-                                padding: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 0),
-                                size: CGSize(width: 40, height: 40))
-        profileImageView.layer.cornerRadius = 40 / 2
+        self.profileImageView.layer.cornerRadius = 40 / 2
         
-        commentTextView.anchor(top: topAnchor,
-                               leading: profileImageView.trailingAnchor,
-                               bottom: bottomAnchor,
-                               trailing: trailingAnchor,
-                               padding: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
+        self.commentTextView.snp.makeConstraints {
+            $0.leading.equalTo(self.profileImageView.snp.trailing).offset(4)
+            $0.top.trailing.bottom.equalToSuperview().inset(8.0)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

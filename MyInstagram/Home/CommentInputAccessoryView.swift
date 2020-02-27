@@ -24,18 +24,18 @@ class CommentInputAccessoryView: UIView {
     }()
     
     private let commentTextView: UITextView = {
-        let tv = UITextView()
-        tv.isScrollEnabled = false
-        tv.font = UIFont.systemFont(ofSize: 18)
-        return tv
+        let textView = UITextView()
+        textView.isScrollEnabled = false
+        textView.font = UIFont.systemFont(ofSize: 18)
+        return textView
     }()
     
-    private let sendButton: UIButton = {
+    private lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("SEND", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.handleSend), for: .touchUpInside)
         
         return button
     }()
@@ -109,7 +109,7 @@ class CommentInputAccessoryView: UIView {
     }
     
     func clearCommentTextView() {
-        commentTextView.text = nil
-        placeholderLabel.isHidden = false
+        self.commentTextView.text = nil
+        self.placeholderLabel.isHidden = false
     }
 }

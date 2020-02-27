@@ -24,7 +24,7 @@ class CommentsViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register([CommentCell.self])
+        collectionView.register([CommentCollectionViewCell.self])
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
         
@@ -128,7 +128,7 @@ extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDe
         cellForItemAt indexPath: IndexPath)
         -> UICollectionViewCell
     {
-        let cell = collectionView.dequeueReusableCell(cellType: CommentCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(cellType: CommentCollectionViewCell.self, for: indexPath)
         cell.comment = self.comments[indexPath.item]
         return cell
     }
@@ -144,8 +144,8 @@ extension CommentsViewController: UICollectionViewDelegateFlowLayout {
         -> CGSize
     {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-        let dummyCell = CommentCell(frame: frame)
-        dummyCell.comment = comments[indexPath.item]
+        let dummyCell = CommentCollectionViewCell(frame: frame)
+        dummyCell.comment = self.comments[indexPath.item]
         dummyCell.layoutIfNeeded()  // after comment set
         
         let targetSize = CGSize(width: view.frame.width, height: 1000)
@@ -153,7 +153,7 @@ extension CommentsViewController: UICollectionViewDelegateFlowLayout {
         
         // Proper cell height for ImageView if text height is short
         let height = max(40 + 8 + 8, estimatedSize.height)  // profileImageView width + padding
-        return CGSize(width: guide.layoutFrame.width, height: height)
+        return CGSize(width: self.guide.layoutFrame.width, height: height)
     }
     
     func collectionView(
