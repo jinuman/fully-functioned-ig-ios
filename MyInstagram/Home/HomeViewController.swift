@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
     
     var posts = [Post]()
     
-    private lazy var collectionView: UICollectionView = {
+    private lazy var postCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(
             frame: .zero,
@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register([HomePostCell.self])
+        collectionView.register([PostCollectionViewCell.self])
         return collectionView
     }()
     
@@ -51,7 +51,7 @@ class HomeViewController: UIViewController {
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        self.postCollectionView.collectionViewLayout.invalidateLayout()
     }
     
     // MARK: - Methods
@@ -73,11 +73,11 @@ class HomeViewController: UIViewController {
     private func configureLayout() {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        self.collectionView.refreshControl = refreshControl
+        self.postCollectionView.refreshControl = refreshControl
         
-        self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.postCollectionView)
         
-        self.collectionView.snp.makeConstraints {
+        self.postCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
@@ -136,7 +136,7 @@ class HomeViewController: UIViewController {
                 let self = self,
                 let dictionaries = snapshot.value as? [String : Any] else { return }
             
-            self.collectionView.refreshControl?.endRefreshing()
+            self.postCollectionView.refreshControl?.endRefreshing()
             
             dictionaries.forEach({ (key, value) in
                 guard
@@ -159,7 +159,7 @@ class HomeViewController: UIViewController {
                     self.posts.sort(by: { (p0, p1) -> Bool in
                         return p0.creationDate.compare(p1.creationDate) == .orderedDescending
                     })
-                    self.collectionView.reloadData()
+                    self.postCollectionView.reloadData()
                     
                 }, withCancel: { (error) in
                     print("Failed to fetch like for post: ", error.localizedDescription)
@@ -191,7 +191,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(
-            cellType: HomePostCell.self,
+            cellType: PostCollectionViewCell.self,
             for: indexPath)
         
         if indexPath.item < posts.count {
@@ -228,8 +228,8 @@ extension HomeViewController: HomePostCellDelegate {
         navigationController?.pushViewController(commentsController, animated: true)
     }
     
-    func didLike(for cell: HomePostCell) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+    func didLike(for cell: PostCollectionViewCell) {
+        guard let indexPath = postCollectionView.indexPath(for: cell) else { return }
         
         var post = self.posts[indexPath.item]
         
@@ -251,7 +251,7 @@ extension HomeViewController: HomePostCellDelegate {
             
             self.posts[indexPath.item] = post
             
-            self.collectionView.reloadItems(at: [indexPath])
+            self.postCollectionView.reloadItems(at: [indexPath])
         }
     }
 }

@@ -60,7 +60,7 @@ class CommentsController: UICollectionViewController {
     }
     
     deinit {
-        print("CommentsController \(#function)")
+        self.deinitLog(objectName: self.className)
     }
     
     fileprivate func fetchComments() {

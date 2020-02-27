@@ -24,6 +24,14 @@ class UserSearchController: UICollectionViewController {
         return sb
     }()
     
+    // MARK: - Initializing
+    
+    deinit {
+        print("UserSearchController \(#function)")
+    }
+    
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
@@ -50,11 +58,9 @@ class UserSearchController: UICollectionViewController {
         searchBar.isHidden = false
     }
     
-    deinit {
-        print("UserSearchController \(#function)")
-    }
+    // MARK: - Methods
     
-    fileprivate func fetchUsers() {
+    private func fetchUsers() {
         let ref = Database.database().reference().child("users")
         ref.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
             guard

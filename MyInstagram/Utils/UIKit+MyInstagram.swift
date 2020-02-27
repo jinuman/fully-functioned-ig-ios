@@ -81,6 +81,11 @@ extension UIColor {
 }
 
 extension UIView {
+    
+    func addToSuperview(_ superview: UIView?) { superview?.addSubview(self) }
+    func addSubviews(_ subviews: [UIView?]) { subviews.forEach { $0?.addToSuperview(self) } }
+    func addSubviews(_ subviews: [UIView]) { subviews.forEach { $0.addToSuperview(self) } }
+    
     @discardableResult
     func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) -> AnchoredConstraints {
         

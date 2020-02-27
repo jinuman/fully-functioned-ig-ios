@@ -7,6 +7,8 @@
 //
 
 import UIKit
+
+import SwiftyBeaver
 import Firebase
 
 @UIApplicationMain
@@ -15,13 +17,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
+        -> Bool
+    {
         // Override point for customization after application launch.
+        
+        // Convenient Logging
+        let console = ConsoleDestination()
+        log.addDestination(console)
+        
         FirebaseApp.configure()
         
-        window = UIWindow()
-        window?.makeKeyAndVisible()
-        window?.rootViewController = MainTabBarController()
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        self.window?.makeKeyAndVisible()
+        self.window?.rootViewController = MainTabBarController()
         
         return true
     }
