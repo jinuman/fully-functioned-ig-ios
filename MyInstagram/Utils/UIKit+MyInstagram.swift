@@ -187,5 +187,24 @@ extension CGSize {
     
 }
 
-
+extension UITabBarItem {
+    
+    convenience init(
+        unselectedImage: UIImage?,
+        selectedImage: UIImage?,
+        renderingMode: UIImage.RenderingMode = .alwaysOriginal,
+        tabType: MainTabType,
+        imageInsets: UIEdgeInsets? = nil)
+    {
+        self.init(
+            title: nil,
+            image: unselectedImage?.withRenderingMode(renderingMode),
+            selectedImage: selectedImage?.withRenderingMode(renderingMode)
+        )
+        self.tag = tabType.rawValue
+        self.imageInsets = imageInsets
+            ?? UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+    }
+    
+}
 

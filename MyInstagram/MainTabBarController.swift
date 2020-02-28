@@ -45,37 +45,45 @@ class MainTabBarController: UITabBarController {
     // Refresh UI by logged in user.
     func configureViewControllers() {
         
-        self.tabBar.tintColor = .black
-        self.tabBar.unselectedItemTintColor = UIColor.lightGray
         self.tabBar.isTranslucent = false
+        self.tabBar.barTintColor = .white
         
         // Home
         let homeNavigationController = HomeViewController
             .toNavigationController(isHiddenBar: false)
+        
         homeNavigationController.tabBarItem = UITabBarItem(
-            title: nil,
-            image: UIImage(named: "home_selected"),
-            tag: MainTabType.home.rawValue
+            unselectedImage: UIImage(named: "home_unselected"),
+            selectedImage: UIImage(named: "home_selected"),
+            tabType: .home
         )
             
         // Search
         let searchNavigationController = UserSearchController
             .toNavigationController(isHiddenBar: false)
+        
         searchNavigationController.tabBarItem = UITabBarItem(
-            title: nil,
-            image: UIImage(named: "search_selected"),
-            tag: MainTabType.search.rawValue
+            unselectedImage: UIImage(named: "search_unselected"),
+            selectedImage: UIImage(named: "search_selected"),
+            tabType: .search
         )
         
+        let plusNavigationController = UIViewController
+            .toNavigationController(isHiddenBar: false)
         
-        let plusNavigationController = templateNavigationController(
-            unselectedImage: #imageLiteral(resourceName: "plus_unselected"),
-            selectedImage: #imageLiteral(resourceName: "plus_unselected")
+        plusNavigationController.tabBarItem = UITabBarItem(
+            unselectedImage: UIImage(named: "plus_unselected"),
+            selectedImage: UIImage(named: "plus_selected"),
+            tabType: .photo
         )
         
-        let likeNavigationController = templateNavigationController(
-            unselectedImage: #imageLiteral(resourceName: "like_unselected"),
-            selectedImage: #imageLiteral(resourceName: "like_selected")
+        let likeNavigationController = UIViewController
+            .toNavigationController(isHiddenBar: false)
+        
+        likeNavigationController.tabBarItem = UITabBarItem(
+            unselectedImage: UIImage(named: "like_unselected"),
+            selectedImage: UIImage(named: "like_selected"),
+            tabType: .like
         )
         
         // user profile
@@ -84,8 +92,6 @@ class MainTabBarController: UITabBarController {
             selectedImage: #imageLiteral(resourceName: "profile_selected"),
             rootViewController: UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         )
-        
-        self.tabBar.tintColor = .black
         
         self.viewControllers = [
             homeNavigationController,

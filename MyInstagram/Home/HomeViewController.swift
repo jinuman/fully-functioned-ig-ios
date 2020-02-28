@@ -58,8 +58,11 @@ class HomeViewController: UIViewController {
     // MARK: - Methods
     
     private func configureNavigationItems() {
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.barTintColor = .white
+        
         guard let cameraImage: UIImage = UIImage(named: "camera3"),
-        let logoImage: UIImage = UIImage(named: "logo2") else { return }
+            let logoImage: UIImage = UIImage(named: "logo2") else { return }
         
         self.navigationItem.titleView = UIImageView(image: logoImage)
         
@@ -72,6 +75,8 @@ class HomeViewController: UIViewController {
     }
     
     private func configureLayout() {
+        self.view.backgroundColor = UIColor.white
+        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         self.postCollectionView.refreshControl = refreshControl
