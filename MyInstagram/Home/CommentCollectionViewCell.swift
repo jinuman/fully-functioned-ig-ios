@@ -32,10 +32,11 @@ class CommentCollectionViewCell: UICollectionViewCell {
     }()
     
     let commentTextView: UITextView = {
-        let tv = UITextView()
-        tv.font = UIFont.systemFont(ofSize: 14)
-        tv.isScrollEnabled = false
-        return tv
+        let textView = UITextView()
+        textView.backgroundColor = .clear
+        textView.font = UIFont.systemFont(ofSize: 14)
+        textView.isScrollEnabled = false
+        return textView
     }()
     
     // MARK:- Initializing

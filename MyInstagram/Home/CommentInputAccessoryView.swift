@@ -14,7 +14,7 @@ protocol CommentInputAccessoryViewDelegate: class {
 
 class CommentInputAccessoryView: UIView {
     
-    weak var delegate: CommentInputAccessoryViewDelegate?
+    private lazy var guide = self.safeAreaLayoutGuide
     
     private let placeholderLabel: UILabel = {
         let label = UILabel()
@@ -25,6 +25,7 @@ class CommentInputAccessoryView: UIView {
     
     private let commentTextView: UITextView = {
         let textView = UITextView()
+        textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.font = UIFont.systemFont(ofSize: 18)
         return textView
@@ -46,6 +47,8 @@ class CommentInputAccessoryView: UIView {
         return view
     }()
     
+    weak var delegate: CommentInputAccessoryViewDelegate?
+    
     override var intrinsicContentSize: CGSize {
         return .zero
     }
@@ -53,20 +56,14 @@ class CommentInputAccessoryView: UIView {
     // MARK:- Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
         
-        autoresizingMask = .flexibleHeight
+        self.initializeLayout()
         
-        [commentTextView, sendButton, lineSeparatorView].forEach {
-            addSubview($0)
+        self.commentTextView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().inset(8)
+            $0.bottom.equalTo(self.guide).inset(8)
+            $0.trailing.equalTo(self.sendButton.snp.leading)
         }
-        
-        let guide = safeAreaLayoutGuide
-        commentTextView.anchor(top: topAnchor,
-                                leading: leadingAnchor,
-                                bottom: guide.bottomAnchor,
-                                trailing: sendButton.leadingAnchor,
-                                padding: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 0))
         
         sendButton.anchor(top: topAnchor,
                           leading: nil,
@@ -88,6 +85,17 @@ class CommentInputAccessoryView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func initializeLayout() {
+        self.backgroundColor = .white
+        self.autoresizingMask = .flexibleHeight
+        
+        self.addSubviews([
+            self.commentTextView,
+            self.sendButton,
+            self.lineSeparatorView
+        ])
     }
     
     fileprivate func setupPlaceholderInsideCommentTextView() {
