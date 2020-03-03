@@ -90,7 +90,7 @@ class MainTabBarController: UITabBarController {
         let userProfileNavigationController = templateNavigationController(
             unselectedImage: #imageLiteral(resourceName: "profile_unselected"),
             selectedImage: #imageLiteral(resourceName: "profile_selected"),
-            rootViewController: UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+            rootViewController: MyProfileViewController()
         )
         
         self.viewControllers = [

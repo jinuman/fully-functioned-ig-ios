@@ -1,5 +1,5 @@
 //
-//  UserProfileController.swift
+//  MyProfileViewController.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 03/03/2019.
@@ -9,11 +9,36 @@
 import UIKit
 import Firebase
 
-class UserProfileController: UICollectionViewController {
+class MyProfileViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    // MARK: UI
+    
+    private lazy var profileCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .white
+        
+        collectionView.register(
+            UserProfileHeader.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: headerId
+        )
+        
+        collectionView.register([
+            UserProfilePhotoCell.self,
+            HomePostCollectionViewCell.self
+        ])
+        
+        return collectionView
+    }()
+    
+    // MARK: General
     
     private let headerId = "headerId"
-    private let cellId = "cellId"
-    private let homePostCellId = "homePostCellId"
     
     private var user: User?
     private var posts = [Post]()
@@ -23,36 +48,42 @@ class UserProfileController: UICollectionViewController {
     
     var userId: String?
     
-    // MARK:- Life cycle methods
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.backgroundColor = .white
-        collectionView.register(UserProfileHeader.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: headerId)
+        self.configureLayout()
         
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         
-        collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
-        
-        collectionView.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: homePostCellId)
-        
-        navigationController?.navigationBar.prefersLargeTitles = false
-        
-        setupLogOutButton()
-        
-        fetchUser()
+        self.fetchUser()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        collectionView.collectionViewLayout.invalidateLayout()
+        profileCollectionView.collectionViewLayout.invalidateLayout()
     }
     
-    fileprivate func setupLogOutButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOut))
+    // MARK: - Methods
+    
+    private func configureLayout() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "gear"),
+            style: .plain,
+            target: self,
+            action: #selector(self.handleSignOut)
+        )
+        
+        self.view.addSubviews([
+            self.profileCollectionView
+        ])
+        
+        self.profileCollectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
     
-    // Handling methods
+    
     fileprivate func fetchUser() {
         let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
         
@@ -61,7 +92,7 @@ class UserProfileController: UICollectionViewController {
             
             self.user = user
             self.navigationItem.title = self.user?.username
-            self.collectionView.reloadData()
+            self.profileCollectionView.reloadData()
             
             self.paginatePosts()
         }
@@ -110,7 +141,7 @@ class UserProfileController: UICollectionViewController {
                 print(post.id ?? "")
             })
             
-            self.collectionView.reloadData()
+            self.profileCollectionView.reloadData()
             
         }) { (err) in
             print("Failed to paginate for posts: ", err.localizedDescription)
@@ -131,13 +162,13 @@ class UserProfileController: UICollectionViewController {
                 let post = Post(user: user, dictionary: dictionary) else { return }
             
             self.posts.insert(post, at: 0) // insert latest post on the top
-            self.collectionView.reloadData()
+            self.profileCollectionView.reloadData()
         }) { (error) in
             print(error.localizedDescription)
         }
     }
     
-    @objc fileprivate func handleSignOut() {
+    @objc private func handleSignOut() {
         let alertController = UIAlertController(title: "Do you want to sign out?", message: nil,
                                                 preferredStyle: .actionSheet)
         let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] (_) in
@@ -162,9 +193,14 @@ class UserProfileController: UICollectionViewController {
     }
 }
 
-// Regarding collectionView delegate flow layout
-extension UserProfileController: UICollectionViewDelegateFlowLayout {
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+// MARK: - Extensions
+
+extension MyProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+}
+
+extension MyProfileViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? UserProfileHeader else { fatalError("Failed to cast UserProfileHeader") }
         
         header.user = self.user
@@ -177,11 +213,11 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: view.frame.width, height: 200)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // fire off the paginate call
         if indexPath.item == self.posts.count - 1 && isFinishedPaging == false {
@@ -190,15 +226,20 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
         }
         
         if isGridView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? UserProfilePhotoCell else {
-                fatalError("Failed to cast UserProfilePhotoCell")
-            }
+            
+            let cell = collectionView.dequeueReusableCell(
+                cellType: UserProfilePhotoCell.self,
+                for: indexPath
+            )
             cell.post = posts[indexPath.item]
             return cell
+            
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? HomePostCollectionViewCell else {
-                fatalError("Failed to cast HomePostCollectionViewCell inside UserProfileController")
-            }
+            
+            let cell = collectionView.dequeueReusableCell(
+                cellType: HomePostCollectionViewCell.self,
+                for: indexPath
+            )
             cell.post = posts[indexPath.item]
             return cell
         }
@@ -232,14 +273,14 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension UserProfileController: UserProfileHeaderDelegate {
+extension MyProfileViewController: UserProfileHeaderDelegate {
     func didChangeToListView() {
-        isGridView = false
-        collectionView.reloadData()
+        self.isGridView = false
+        self.profileCollectionView.reloadData()
     }
     
     func didChangeToGridView() {
-        isGridView = true
-        collectionView.reloadData()
+        self.isGridView = true
+        self.profileCollectionView.reloadData()
     }
 }

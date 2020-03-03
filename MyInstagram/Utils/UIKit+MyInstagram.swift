@@ -59,7 +59,7 @@ extension UICollectionView {
      - Parameters:
      - cellTypes: 다수의 UICollectionViewCell.Type들로 이루어진 Array
      */
-    func register<T: UICollectionViewCell>(_ cellTypes: [T.Type]) {
+    func register(_ cellTypes: [UICollectionViewCell.Type]) {
         for cellType in cellTypes {
             self.register(cellType, forCellWithReuseIdentifier: "\(cellType.self)")
         }
