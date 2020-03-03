@@ -21,7 +21,7 @@
 		364096FC2276EFA9006561C9 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364096FB2276EFA9006561C9 /* PreviewPhotoContainerView.swift */; };
 		364096FE22770827006561C9 /* CustomAnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364096FD22770827006561C9 /* CustomAnimationPresenter.swift */; };
 		3640970022770BD4006561C9 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364096FF22770BD4006561C9 /* CustomAnimationDismisser.swift */; };
-		3640970222771D00006561C9 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3640970122771D00006561C9 /* CommentsViewController.swift */; };
+		3640970222771D00006561C9 /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3640970122771D00006561C9 /* CommentListViewController.swift */; };
 		36544594222B9609006FF627 /* UIKit+MyInstagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36544593222B9609006FF627 /* UIKit+MyInstagram.swift */; };
 		3654D15A223F8D5E00933705 /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3654D159223F8D5E00933705 /* PhotoSelectorCell.swift */; };
 		3654D15C223FA78800933705 /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3654D15B223FA78800933705 /* PhotoSelectorHeader.swift */; };
@@ -71,7 +71,7 @@
 		364096FB2276EFA9006561C9 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		364096FD22770827006561C9 /* CustomAnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresenter.swift; sourceTree = "<group>"; };
 		364096FF22770BD4006561C9 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
-		3640970122771D00006561C9 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		3640970122771D00006561C9 /* CommentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
 		36544593222B9609006FF627 /* UIKit+MyInstagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+MyInstagram.swift"; sourceTree = "<group>"; };
 		3654D159223F8D5E00933705 /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		3654D15B223FA78800933705 /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
@@ -268,7 +268,7 @@
 			children = (
 				36FCDACD226DEC1E00B05CD6 /* HomeViewController.swift */,
 				36FCDACF226DED5000B05CD6 /* HomePostCollectionViewCell.swift */,
-				3640970122771D00006561C9 /* CommentsViewController.swift */,
+				3640970122771D00006561C9 /* CommentListViewController.swift */,
 				3617DC46227801FF00506AF8 /* CommentCollectionViewCell.swift */,
 				36E2619122787723002A7164 /* CommentInputAccessoryView.swift */,
 			);
@@ -460,7 +460,7 @@
 				3617DC492278052F00506AF8 /* Comment.swift in Sources */,
 				3670D29E222B7C98002FDAF9 /* SignUpController.swift in Sources */,
 				3654D15A223F8D5E00933705 /* PhotoSelectorCell.swift in Sources */,
-				3640970222771D00006561C9 /* CommentsViewController.swift in Sources */,
+				3640970222771D00006561C9 /* CommentListViewController.swift in Sources */,
 				364096FE22770827006561C9 /* CustomAnimationPresenter.swift in Sources */,
 				36FCDACB226DBE5D00B05CD6 /* CustomImageView.swift in Sources */,
 				360A2064226D7CF600FC4088 /* Post.swift in Sources */,

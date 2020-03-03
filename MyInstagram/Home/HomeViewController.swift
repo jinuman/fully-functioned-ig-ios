@@ -229,7 +229,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomePostCellDelegate {
     func didTapComment(post: Post) {
-        let commentsViewController = CommentsViewController()
+        let commentsViewController = CommentListViewController()
         commentsViewController.post = post
         commentsViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(commentsViewController, animated: true)

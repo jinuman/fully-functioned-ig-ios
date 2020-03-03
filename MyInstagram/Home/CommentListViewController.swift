@@ -1,5 +1,5 @@
 //
-//  CommentsViewController.swift
+//  CommentListViewController.swift
 //  MyInstagram
 //
 //  Created by Jinwoo Kim on 29/04/2019.
@@ -10,7 +10,7 @@ import UIKit
 
 import Firebase
 
-class CommentsViewController: UIViewController {
+class CommentListViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -114,7 +114,7 @@ class CommentsViewController: UIViewController {
 
 // MARK: - Extensions
 
-extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension CommentListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int)
@@ -134,7 +134,7 @@ extension CommentsViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 }
 
-extension CommentsViewController: UICollectionViewDelegateFlowLayout {
+extension CommentListViewController: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(
@@ -166,7 +166,7 @@ extension CommentsViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CommentsViewController: CommentInputAccessoryViewDelegate {
+extension CommentListViewController: CommentInputAccessoryViewDelegate {
     func didSend(for comment: String) {
         guard let uid = Auth.auth().currentUser?.uid,
             let postId = post?.id else { return }
